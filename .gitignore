@@ -1,0 +1,14 @@
+# Godot 4
+.godot/
+*.translation
+/android/
+
+# Exporty hry
+/build/
+/export/
+*.zip
+
+# Systém a editory
+.DS_Store
+Thumbs.db
+*.tmp
