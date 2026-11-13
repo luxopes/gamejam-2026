@@ -48,7 +48,9 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 
 ## Práce v týmu
 
-- Před prací `git pull`, po práci commit a `git push`.
+- Před prací `git pull --rebase`, po práci commit a `git push`.
+- Formát commitů a další pravidla jsou v `AGENTS.md`. Po naklonování jednou spusť
+  `git config core.hooksPath .githooks` a `git config pull.rebase true`.
 - Scény (`.tscn`) se špatně slučují. Domluvte se, kdo zrovna upravuje kterou
   scénu, ideálně má každý svoji úroveň nebo svůj objekt.
 - Soubory `*.uid` a `*.import` do Gitu patří, složka `.godot/` ne.
