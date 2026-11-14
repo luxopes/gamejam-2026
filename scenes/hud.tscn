@@ -14,8 +14,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 56
-text = "Les se odrazil zpátky.
-R = hrát znovu"
+text = "The forest bounced back.
+R = play again"
 horizontal_alignment = 1
 vertical_alignment = 1
 

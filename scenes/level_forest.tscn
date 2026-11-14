@@ -168,7 +168,7 @@ offset_left = 96.0
 offset_top = 144.0
 offset_right = 96.0
 offset_bottom = 144.0
-text = "Les zemřel. Ještě se může odrazit zpátky."
+text = "The forest died. It can still bounce back."
 
 [node name="Portal" parent="Present" unique_id=1740757390 instance=ExtResource("8_0xk4j")]
 position = Vector2(480, 288)
