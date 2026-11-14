@@ -36,6 +36,14 @@ signal health_changed(health: int, max_health: int)
 @export var look_distance := 180.0    ## o kolik se kamera posune nahoru/dolů (px)
 @export var look_speed := 600.0       ## jak rychle kamera sjede (px/s)
 
+@export_group("Efekty")
+@export var landing_dust_speed := 400.0  ## od jaké rychlosti pádu se při dopadu zvedne prach (px/s)
+
+const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
+const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
+const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
+const DUST_PUFF := preload("res://scenes/vfx/dust_puff.tscn")
+
 var _coyote := 0.0
 var _buffer := 0.0
 var _jumping := false   # true jen u normálního skoku, aby šlo zkrátit puštěním klávesy
@@ -56,12 +64,11 @@ var _look_timer := 0.0
 @onready var _hurtbox: Area2D = $Hurtbox
 
 @onready var _attack_area: Area2D = $AttackArea
-@onready var _slash: ColorRect = $AttackArea/Slash
+@onready var _slash: Vfx = $AttackArea/Slash
 @onready var _camera: Camera2D = $Camera2D
 
 
 func _ready() -> void:
-	_slash.visible = false
 	# Po smrti začíná hráč na posledním checkpointu
 	var spawn = Game.get_checkpoint(owner)
 	if spawn != null:
@@ -97,6 +104,7 @@ func _physics_process(delta: float) -> void:
 		_buffer = 0.0
 		_coyote = 0.0
 		_jumping = true
+		_spawn_vfx(DUST_PUFF, global_position)
 	# Krátký stisk = nižší skok (pogo se tím nezkracuje)
 	if Input.is_action_just_released("jump") and _jumping and velocity.y < 0.0:
 		velocity.y *= 0.5
@@ -112,7 +120,11 @@ func _physics_process(delta: float) -> void:
 
 	_update_attack(delta)
 
+	var fall_speed := velocity.y
+	var was_on_floor := is_on_floor()
 	move_and_slide()
+	if is_on_floor() and not was_on_floor and fall_speed >= landing_dust_speed:
+		_spawn_vfx(DUST_PUFF, global_position)
 
 	if global_position.y > fall_limit_y:
 		die()
@@ -137,8 +149,6 @@ func _update_attack(delta: float) -> void:
 	if _attack_timer > 0.0:
 		_attack_timer -= delta
 		_check_hits()
-		if _attack_timer <= 0.0:
-			_slash.visible = false
 
 
 func _start_attack(direction: Vector2) -> void:
@@ -149,7 +159,7 @@ func _start_attack(direction: Vector2) -> void:
 	_attack_timer = attack_duration
 	_cooldown_timer = attack_cooldown
 	_already_hit.clear()
-	_slash.visible = true
+	_slash.play()
 
 
 func _check_hits() -> void:
@@ -163,6 +173,7 @@ func _check_hits() -> void:
 		if not hittable and not target.is_in_group("pogo"):
 			continue
 		_already_hit.append(target)
+		_spawn_vfx(HIT_SPARK, _attack_area.global_position + _attack_dir * 40.0)
 		if hittable:
 			target.hit(_attack_dir)
 		_apply_hit_reaction()
@@ -194,13 +205,15 @@ func _update_dash(delta: float) -> bool:
 		var direction := Input.get_axis("move_left", "move_right")
 		if direction != 0.0:
 			_facing = signf(direction)
-		if not is_on_floor():
+		if is_on_floor():
+			_spawn_vfx(DASH_DUST, global_position, -_facing)   # prach zůstává za hráčem
+		else:
 			_can_air_dash = false
 		_dash_timer = dash_time
 		_dash_cooldown_timer = dash_cooldown
 		# Dash zruší rozběhnutý sek a skok
 		_attack_timer = 0.0
-		_slash.visible = false
+		_slash.stop()
 		_recoil_timer = 0.0
 		_jumping = false
 		_buffer = 0.0
@@ -263,6 +276,7 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 		return
 	health = maxi(health - amount, 0)
 	health_changed.emit(health, max_health)
+	_spawn_vfx(HURT_BURST, global_position + Vector2(0, -24))
 	if health == 0:
 		die()
 		return
@@ -283,6 +297,15 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 func heal_full() -> void:
 	health = max_health
 	health_changed.emit(health, max_health)
+
+
+## Vytvoří jednorázový efekt v úrovni (zůstane na místě, i když se hráč pohne).
+## flip = -1 efekt zrcadlí.
+func _spawn_vfx(scene: PackedScene, at: Vector2, flip := 1.0) -> void:
+	var fx: Node2D = scene.instantiate()
+	fx.scale.x *= flip
+	get_parent().add_child(fx)
+	fx.global_position = at
 
 
 func die() -> void:
