@@ -17,6 +17,11 @@ extends CharacterBody2D
 @export var recoil_time := 0.12       ## jak dlouho odhození přebije ovládání (s)
 @export var up_recoil := 150.0        ## sražení dolů po seku nahoru
 
+@export_group("Dash")
+@export var dash_speed := 900.0       ## rychlost dashe (px/s)
+@export var dash_time := 0.18         ## jak dlouho dash trvá (s)
+@export var dash_cooldown := 0.5      ## pauza mezi dashi (s)
+
 var _coyote := 0.0
 var _buffer := 0.0
 var _jumping := false   # true jen u normálního skoku, aby šlo zkrátit puštěním klávesy
@@ -26,6 +31,9 @@ var _cooldown_timer := 0.0
 var _attack_dir := Vector2.RIGHT
 var _already_hit: Array[Node] = []
 var _recoil_timer := 0.0
+var _dash_timer := 0.0
+var _dash_cooldown_timer := 0.0
+var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo pogo
 
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: ColorRect = $AttackArea/Slash
@@ -36,9 +44,13 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _update_dash(delta):
+		return
+
 	# Gravitace
 	if is_on_floor():
 		_coyote = coyote_time
+		_can_air_dash = true
 	else:
 		_coyote -= delta
 		velocity.y += gravity * delta
@@ -132,11 +144,48 @@ func _apply_hit_reaction() -> void:
 			# Pogo
 			velocity.y = pogo_velocity
 			_jumping = false
+			_can_air_dash = true
 		Vector2.UP:
 			velocity.y = maxf(velocity.y, up_recoil)
 		_:
 			velocity.x = -_attack_dir.x * recoil_speed
 			_recoil_timer = recoil_time
+
+
+## Dash jako v Hollow Knight: rychle vodorovně, bez gravitace, pevná délka.
+## Vrací true, dokud dash běží (pak se normální pohyb přeskočí).
+func _update_dash(delta: float) -> bool:
+	_dash_cooldown_timer -= delta
+	if _dash_timer <= 0.0 and Input.is_action_just_pressed("dash") \
+			and _dash_cooldown_timer <= 0.0 and (is_on_floor() or _can_air_dash):
+		var direction := Input.get_axis("move_left", "move_right")
+		if direction != 0.0:
+			_facing = signf(direction)
+		if not is_on_floor():
+			_can_air_dash = false
+		_dash_timer = dash_time
+		_dash_cooldown_timer = dash_cooldown
+		# Dash zruší rozběhnutý sek a skok
+		_attack_timer = 0.0
+		_slash.visible = false
+		_recoil_timer = 0.0
+		_jumping = false
+		_buffer = 0.0
+		modulate = Color(1.4, 1.4, 1.4)
+
+	if _dash_timer <= 0.0:
+		return false
+
+	_dash_timer -= delta
+	velocity = Vector2(_facing * dash_speed, 0.0)
+	move_and_slide()
+	if _dash_timer <= 0.0:
+		# Na konci dashe prudce zpomalí na běžnou rychlost
+		velocity.x = _facing * speed
+		modulate = Color.WHITE
+	if global_position.y > fall_limit_y:
+		die()
+	return true
 
 
 func die() -> void:
