@@ -112,8 +112,26 @@ func _physics_process(delta: float) -> void:
 
 func _update_attack(delta: float) -> void:
 	_cooldown_timer -= delta
-	if Input.is_action_just_pressed("attack") and _cooldown_timer <= 0.0:
-		_start_attack()
+	if _cooldown_timer <= 0.0:
+		var attack_direction := Vector2.ZERO
+		# Šipka spustí sek přímo ve svém směru, nezávisle na pohybu.
+		if Input.is_action_just_pressed("attack_up"):
+			attack_direction = Vector2.UP
+		elif Input.is_action_just_pressed("attack_down"):
+			attack_direction = Vector2.DOWN
+		elif Input.is_action_just_pressed("attack_left"):
+			attack_direction = Vector2.LEFT
+		elif Input.is_action_just_pressed("attack_right"):
+			attack_direction = Vector2.RIGHT
+		elif Input.is_action_just_pressed("attack"):
+			# Gamepad míří páčkou nebo křížem a útočí tlačítkem X.
+			attack_direction = Vector2(_facing, 0.0)
+			if Input.is_action_pressed("move_up"):
+				attack_direction = Vector2.UP
+			elif Input.is_action_pressed("move_down") and not is_on_floor():
+				attack_direction = Vector2.DOWN
+		if attack_direction != Vector2.ZERO:
+			_start_attack(attack_direction)
 
 	if _attack_timer > 0.0:
 		_attack_timer -= delta
@@ -122,15 +140,10 @@ func _update_attack(delta: float) -> void:
 			_slash.visible = false
 
 
-func _start_attack() -> void:
-	# Směr: nahoru > dolů (jen ve vzduchu) > tam, kam hráč kouká
-	if Input.is_action_pressed("move_up"):
-		_attack_dir = Vector2.UP
-	elif Input.is_action_pressed("move_down") and not is_on_floor():
-		_attack_dir = Vector2.DOWN
-	else:
-		_attack_dir = Vector2(_facing, 0.0)
-
+func _start_attack(direction: Vector2) -> void:
+	_attack_dir = direction
+	if direction.x != 0.0:
+		_facing = direction.x
 	_attack_area.rotation = _attack_dir.angle()
 	_attack_timer = attack_duration
 	_cooldown_timer = attack_cooldown
