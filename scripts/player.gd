@@ -40,6 +40,13 @@ signal health_changed(health: int, max_health: int)
 @export_group("Efekty")
 @export var landing_dust_speed := 400.0  ## od jaké rychlosti pádu se při dopadu zvedne prach (px/s)
 @export var sprite_faces_left := false   ## kam kouká postava ve sheetu (poutník kouká doprava)
+@export var shake_strength := 4.0        ## otřes kamery při zásahu a pogu (px)
+@export var shake_time := 0.15           ## jak dlouho otřes trvá (s)
+@export var hit_stop_time := 0.06        ## zamrznutí hry při zásahu nepřítele (s)
+@export var jump_stretch := Vector2(0.8, 1.2)   ## natažení postavy při odrazu (šířka, výška)
+@export var land_squash := Vector2(1.25, 0.8)   ## zmáčknutí postavy při dopadu
+@export var land_squash_speed := 200.0   ## od jaké rychlosti pádu se postava při dopadu zmáčkne (px/s)
+@export var squash_time := 0.15          ## jak rychle se postava vrátí do normálu (s)
 
 const WALL_REACH := 64.0   # kam až sek do strany dosáhne na zeď (konec oblasti seku)
 const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
@@ -64,6 +71,9 @@ var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo p
 var _dead := false
 var _invulnerable_timer := 0.0
 var _look_timer := 0.0
+var _look_offset := 0.0      # posun kamery od rozhlížení
+var _shake_timer := 0.0
+var _squash_tween: Tween
 
 @onready var health := max_health
 @onready var _hurtbox: Area2D = $Hurtbox
@@ -74,6 +84,7 @@ var _look_timer := 0.0
 @onready var _side_attack_size: Vector2 = _attack_shape.shape.size
 @onready var _camera: Camera2D = $Camera2D
 @onready var _sprite: AnimatedSprite2D = $Sprite
+@onready var _sprite_scale: Vector2 = _sprite.scale
 
 
 func _ready() -> void:
@@ -116,6 +127,7 @@ func _physics_process(delta: float) -> void:
 		_coyote = 0.0
 		_jumping = true
 		_spawn_vfx(DUST_PUFF, global_position)
+		_squash(jump_stretch)
 	# Krátký stisk = nižší skok (pogo se tím nezkracuje)
 	if Input.is_action_just_released("jump") and _jumping and velocity.y < 0.0:
 		velocity.y *= 0.5
@@ -134,8 +146,11 @@ func _physics_process(delta: float) -> void:
 	var fall_speed := velocity.y
 	var was_on_floor := is_on_floor()
 	move_and_slide()
-	if is_on_floor() and not was_on_floor and fall_speed >= landing_dust_speed:
-		_spawn_vfx(DUST_PUFF, global_position)
+	if is_on_floor() and not was_on_floor:
+		if fall_speed >= landing_dust_speed:
+			_spawn_vfx(DUST_PUFF, global_position)
+		if fall_speed >= land_squash_speed:
+			_squash(land_squash)
 
 	if global_position.y > fall_limit_y:
 		die()
@@ -189,6 +204,9 @@ func _check_hits() -> void:
 			continue
 		_already_hit.append(target)
 		_spawn_vfx(HIT_SPARK, _attack_area.global_position + _attack_dir * 40.0)
+		_shake()
+		if hittable and target.is_in_group("hurts_player"):
+			_hit_stop()   # nepřítel (bodáky nemají hit(), krystal a páka nezraňují)
 		if hittable:
 			target.hit(_attack_dir)
 		_apply_hit_reaction()
@@ -232,6 +250,7 @@ func _apply_hit_reaction() -> void:
 			if is_on_floor():
 				return
 			velocity.y = pogo_velocity
+			_squash(jump_stretch)
 			_jumping = false
 			_can_air_dash = true
 		Vector2.UP:
@@ -294,7 +313,41 @@ func _update_look(delta: float) -> void:
 	var target := 0.0
 	if _look_timer >= look_delay:
 		target = signf(look) * look_distance
-	_camera.offset.y = move_toward(_camera.offset.y, target, look_speed * delta)
+	_look_offset = move_toward(_look_offset, target, look_speed * delta)
+
+	# Otřes po zásahu slábne, jak běží čas
+	var shake := Vector2.ZERO
+	if _shake_timer > 0.0:
+		_shake_timer -= delta
+		var strength := shake_strength * maxf(_shake_timer, 0.0) / shake_time
+		shake = Vector2(randf_range(-strength, strength), randf_range(-strength, strength))
+	_camera.offset = Vector2(0.0, _look_offset) + shake
+
+
+func _shake() -> void:
+	_shake_timer = shake_time
+
+
+## Krátké zamrznutí hry při zásahu nepřítele. Čas vrací Engine sám přes časovač,
+## který zpomalení nepodléhá, takže se hra nezasekne, ani když hráč mezitím zmizí
+## (třeba při znovunačtení úrovně).
+func _hit_stop() -> void:
+	if hit_stop_time <= 0.0 or Engine.time_scale == 0.0:
+		return
+	Engine.time_scale = 0.0
+	get_tree().create_timer(hit_stop_time, true, false, true).timeout.connect(
+			Engine.set.bind("time_scale", 1.0))
+
+
+## Zmáčknutí/natažení postavy (jen vzhled, hitbox zůstává). Sprite má počátek
+## u nohou, takže postava zůstane stát na zemi.
+func _squash(amount: Vector2) -> void:
+	if _squash_tween:
+		_squash_tween.kill()
+	_sprite.scale = _sprite_scale * amount
+	_squash_tween = create_tween()
+	_squash_tween.tween_property(_sprite, "scale", _sprite_scale, squash_time) \
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 ## Zranění od čehokoli ve skupině "hurts_player" (bodáky, nepřátelé).
