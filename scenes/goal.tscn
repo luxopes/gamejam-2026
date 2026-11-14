@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/goal.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/levels/sunnyland/chest.png" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/vfx/treasure_glint.tscn" id="3"]
+[ext_resource type="AudioStream" path="res://assets/levels/sunnyland/chest.ogg" id="4"]
 
 [sub_resource type="RectangleShape2D" id="shape"]
 size = Vector2(40, 80)
@@ -19,6 +20,9 @@ hframes = 2
 
 [node name="Glint" parent="." instance=ExtResource("3")]
 position = Vector2(0, -20)
+
+[node name="OpenSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -40)
