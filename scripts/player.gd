@@ -38,6 +38,7 @@ signal health_changed(health: int, max_health: int)
 
 @export_group("Efekty")
 @export var landing_dust_speed := 400.0  ## od jaké rychlosti pádu se při dopadu zvedne prach (px/s)
+@export var sprite_faces_left := false   ## kam kouká postava ve sheetu (poutník kouká doprava)
 
 const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
@@ -304,30 +305,38 @@ func heal_full() -> void:
 	health_changed.emit(health, max_health)
 
 
-## Animace postavy podle stavu. Sprite dodá grafik: v uzlu Sprite (AnimatedSprite2D)
-## stačí vytvořit SpriteFrames s animacemi idle, run, jump, fall, attack a dash.
-## Volitelně attack_up a attack_down, jinak se pro všechny směry použije attack.
+## Animace postavy podle stavu (SpriteFrames v uzlu Sprite):
+## idle, run, jump, fall, dash, look_up, look_down. Volitelně attack, attack_up
+## a attack_down; dokud nejsou, při seku běží dál pohybová animace.
 func _update_animation() -> void:
 	var anim := "idle"
 	if _dash_timer > 0.0:
 		anim = "dash"
-	elif _slash.visible:
-		anim = "attack"
-		if _attack_dir == Vector2.UP:
-			anim = "attack_up"
-		elif _attack_dir == Vector2.DOWN:
-			anim = "attack_down"
 	elif not is_on_floor():
 		anim = "jump" if velocity.y < 0.0 else "fall"
 	elif absf(velocity.x) > 1.0:
 		anim = "run"
-	_sprite.flip_h = _facing < 0.0
+	else:
+		var look := Input.get_axis("move_up", "move_down")
+		if look < 0.0:
+			anim = "look_up"
+		elif look > 0.0:
+			anim = "look_down"
+	_sprite.flip_h = (_facing > 0.0) == sprite_faces_left
 
 	var frames := _sprite.sprite_frames
 	if frames == null:
 		return
-	if not frames.has_animation(anim) and anim.begins_with("attack"):
-		anim = "attack"
+	if _slash.visible and _dash_timer <= 0.0:
+		var attack := "attack"
+		if _attack_dir == Vector2.UP:
+			attack = "attack_up"
+		elif _attack_dir == Vector2.DOWN:
+			attack = "attack_down"
+		for name in [attack, "attack"]:
+			if frames.has_animation(name):
+				anim = name
+				break
 	if frames.has_animation(anim) and _sprite.animation != anim:
 		_sprite.play(anim)
 
