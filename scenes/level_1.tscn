@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/goal.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/checkpoint.tscn" id="8"]
 
 [node name="Level1" type="Node2D" unique_id=635269604]
 script = ExtResource("1_pa8r4")
@@ -120,6 +121,9 @@ color = Color(0.53167063, 0.8168843, 0.44396064, 1)
 [node name="Step3" parent="Past/Platforms" unique_id=1157336795 instance=ExtResource("2")]
 position = Vector2(1000, 330)
 color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="Checkpoint1" parent="." instance=ExtResource("8")]
+position = Vector2(1450, 600)
 
 [node name="Player" parent="." unique_id=1439967328 instance=ExtResource("1")]
 position = Vector2(100, 600)

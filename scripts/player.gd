@@ -55,6 +55,10 @@ var _invulnerable_timer := 0.0
 
 func _ready() -> void:
 	_slash.visible = false
+	# Po smrti začíná hráč na posledním checkpointu
+	var spawn = Game.get_checkpoint(owner)
+	if spawn != null:
+		global_position = spawn
 	health_changed.emit(health, max_health)
 
 
