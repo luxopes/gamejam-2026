@@ -1,16 +1,13 @@
 extends Area2D
-## Portál do jiného času. Barva podle cíle: do minulosti teplá (oranžová),
-## do přítomnosti studená (modrá), ať hráč hned pozná, kam vede.
+## Přechod mezi přítomností a minulostí.
 
 @export var target_time := "past"
 
 const WARM := Color(1.0, 0.72, 0.35)
 const COLD := Color(0.45, 0.7, 1.0)
-## Po přepnutí času portály pár fyzikálních snímků hráče ignorují. Jinak by se čas
-## u hráče stojícího v portálech obou světů přepínal pořád dokola (pád na pár FPS).
-## Projít zpátky jde až po vyjití z portálu a novém vstupu.
 const REENTRY_DELAY_FRAMES := 5
 
+# Sdílený limit brání okamžitému návratu portálem druhého světa.
 static var _last_switch_frame := -REENTRY_DELAY_FRAMES
 
 

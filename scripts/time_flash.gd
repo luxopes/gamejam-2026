@@ -1,10 +1,9 @@
 extends CanvasLayer
-## Záblesk při přechodu časem: když se změní čas (portál), obrazovka na chvilku zbělá.
-## Je to autoload (Project Settings → Globals), takže funguje v každé úrovni.
+## Záblesk obrazovky při změně času.
 
-@export var peak_alpha := 0.8    ## jak moc obrazovka zbělá (0–1)
-@export var fade_in := 0.05      ## náběh záblesku (s)
-@export var fade_out := 0.25     ## doznění (s)
+@export var peak_alpha := 0.8
+@export var fade_in := 0.05
+@export var fade_out := 0.25
 
 const PORTAL_SOUND := preload("res://assets/sfx/portal.wav")
 
@@ -19,7 +18,6 @@ func _ready() -> void:
 
 func _on_time_changed(_time: String) -> void:
 	Sfx.play(PORTAL_SOUND, -2.0)
-	# Dva portály rychle za sebou: záblesk začne znovu, ne dva najednou
 	if _tween:
 		_tween.kill()
 	_rect.modulate.a = 0.0

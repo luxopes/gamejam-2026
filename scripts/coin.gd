@@ -1,6 +1,5 @@
 extends Area2D
-## Zlatá mince (Simple rotating coin od sacio). Po sebrání hráčem zmizí, přičte bod a blikne efektem.
-## Sebraná zůstane pryč i po smrti.
+## Sbírání mincí a efekt sebrání.
 
 const FEEDBACK := preload("res://scenes/vfx/item_feedback.tscn")
 const SOUND := preload("res://assets/sfx/coin.wav")

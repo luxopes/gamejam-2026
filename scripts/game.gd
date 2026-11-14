@@ -1,5 +1,5 @@
 extends Node
-## Globální stav hry (autoload "Game" - je dostupný odkudkoli jako Game.neco).
+## Stav hry, checkpointy a přechody mezi scénami.
 
 signal coins_changed(count: int)
 signal level_finished
@@ -14,10 +14,11 @@ func set_time(new_time: String) -> void:
 
 
 var coins := 0
-var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
-var _new_game := false       # po výhře: R spustí hru znovu od začátku
-var restart_locked := false  # během závěrečných titulků R nefunguje
-var respawn_health := 0      # životy po návratu na checkpoint; 0 = plné
+var _collected_coins := {}
+var _new_game := false
+var restart_locked := false
+# Nula znamená obnovení plných životů.
+var respawn_health := 0
 var flags := {}
 
 func set_flag(flag: String) -> void:
@@ -29,7 +30,6 @@ func has_flag(flag: String) -> bool:
 	return flags.has(flag)
 
 
-# Poslední checkpoint: ve které úrovni, kde a v jakém čase. Prázdné = začátek úrovně.
 var _checkpoint_level := ""
 var _checkpoint_position := Vector2.ZERO
 var _checkpoint_time := "present"
@@ -47,44 +47,37 @@ func spend_coins(amount: int) -> void:
 	coins_changed.emit(coins)
 
 
-## Mince sebraná před smrtí se po novém načtení úrovně už neobjeví.
 func is_coin_collected(coin: Node) -> bool:
 	return _collected_coins.has(_coin_id(coin))
 
 
-# Úroveň + cesta k minci ve scéně; po novém načtení úrovně zůstává stejná
+# Cesta ve scéně zůstává po restartu stejná, instance uzlu ne.
 func _coin_id(coin: Node) -> String:
 	if coin.owner == null:
 		return str(coin.get_path())
 	return coin.owner.scene_file_path + ":" + str(coin.owner.get_path_to(coin))
 
 
-## Zavolá checkpoint, když se ho hráč dotkne.
 func set_checkpoint(level: Node, position: Vector2) -> void:
 	_checkpoint_level = level.scene_file_path
 	_checkpoint_position = position
 	_checkpoint_time = time
 
 
-## Kde se má hráč objevit, nebo null (pak zůstane na startu úrovně).
 func get_checkpoint(level: Node) -> Variant:
 	if level != null and level.scene_file_path == _checkpoint_level:
 		return _checkpoint_position
 	return null
 
 
-## Zavolá se při smrti hráče nebo klávesou R. Hráč začne na posledním checkpointu.
 func restart_level() -> void:
 	if _new_game:
-		new_game()   # hrát znovu po výhře
+		new_game()
 	elif get_checkpoint(get_tree().current_scene) != null:
-		# Vrátí i čas, ve kterém byl checkpoint, ať hráč nestojí ve vzduchu
 		time = _checkpoint_time
-	# Sebrané mince (počet i samotné mince) zůstávají i po smrti
 	get_tree().reload_current_scene.call_deferred()
 
 
-## Nová hra od začátku: mince od nuly, hádanky nevyřešené, žádný checkpoint, přítomnost.
 func new_game() -> void:
 	coins = 0
 	flags.clear()
@@ -96,7 +89,6 @@ func new_game() -> void:
 	time = "present"
 
 
-## Zavolá cíl. Když je next_scene prázdné, hra končí výhrou.
 func finish_level(next_scene: String) -> void:
 	flags.clear()
 	_checkpoint_level = ""
@@ -112,7 +104,6 @@ func finish_level(next_scene: String) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("restart") and not restart_locked:
-		# R jako pád do jámy: hráč se vrátí se stejnými životy
 		var player := get_tree().get_first_node_in_group("player")
 		if player:
 			respawn_health = player.health

@@ -1,7 +1,6 @@
 @tool
 extends StaticBody2D
-## Plošina. Velikost a barvu nastav v Inspektoru, kolize se upraví sama.
-## Pozice uzlu = levý horní roh plošiny.
+## Plošina s nastavitelnou velikostí. Počátek leží v levém horním rohu.
 
 @export var size := Vector2(200, 30):
 	set(value):

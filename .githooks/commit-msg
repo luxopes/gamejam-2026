@@ -1,8 +1,7 @@
 #!/bin/sh
-# Kontrola formátu commit zprávy podle AGENTS.md.
+# Kontrola formátu commit zprávy.
 first_line=$(head -n 1 "$1")
 
-# Automatické zprávy Gitu necháváme být.
 case "$first_line" in
 	"Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
 esac

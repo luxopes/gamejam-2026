@@ -1,6 +1,6 @@
 extends Area2D
+## Záblesk krystalu po zásahu.
 
-## Po zásahu krystal krátce blikne.
 func hit(_direction: Vector2) -> void:
 	modulate = Color(2, 2, 2)
 	var tween := create_tween()

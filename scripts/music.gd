@@ -1,10 +1,8 @@
 extends Node
-## Hudba přítomnosti a minulosti. Obě stopy hrají dokola současně, slyšet je jen ta,
-## která patří k aktuálnímu času (Game.time). Při změně času se plynule prolnou.
-## Je to autoload, takže hudba po smrti a novém načtení úrovně nezačne od začátku.
+## Prolínání hudby přítomnosti a minulosti.
 
-@export var volume_db := 0.0     ## hlasitost hudby
-@export var fade_time := 0.5     ## jak dlouho trvá prolnutí stop (s)
+@export var volume_db := 0.0
+@export var fade_time := 0.5
 
 @onready var _tracks := {"present": $Present, "past": $Past}
 
@@ -13,14 +11,12 @@ func _ready() -> void:
 	for time in _tracks:
 		var player: AudioStreamPlayer = _tracks[time]
 		player.volume_db = _db(1.0 if time == Game.time else 0.0)
-		# Bez obrazovky (testy, kontrola z AGENTS.md) nehraje: nic by nebylo slyšet
-		# a Godot by při ukončení hlásil nedohrané přehrávání jako chybu.
 		if DisplayServer.get_name() != "headless":
 			player.play()
 
 
+# Návrat na checkpoint mění čas i bez signálu time_changed.
 func _process(delta: float) -> void:
-	# Hlídá Game.time každý snímek: čas se mění portálem, ale i návratem na checkpoint
 	for time in _tracks:
 		var player: AudioStreamPlayer = _tracks[time]
 		var target := 1.0 if time == Game.time else 0.0

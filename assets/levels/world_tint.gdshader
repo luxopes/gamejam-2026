@@ -1,9 +1,8 @@
-shader_type canvas_item;
-// Barevný nádech světa. Přítomnost: vybledlá a studená, minulost: sytě zelená.
-// Nastavení jsou v present_world.tres a past_world.tres.
-// Stejný výpočet má editor úrovní (tools/level_editor/editor.html, funkce tinted).
+// Barevný nádech přítomného a minulého světa.
 
-uniform float desaturation : hint_range(0.0, 1.0) = 0.0;  // 1 = úplně šedé
+shader_type canvas_item;
+
+uniform float desaturation : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 tint : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float brightness : hint_range(0.0, 2.0) = 1.0;
 

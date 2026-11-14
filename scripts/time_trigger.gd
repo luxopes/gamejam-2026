@@ -1,8 +1,5 @@
 extends Area2D
-## Spouštěč v minulosti. Po zásahu sekem nastaví příznak.
-## Balvan (flag "balvan", vytesaný kámen se sluncem) se po zásahu skutálí z římsy,
-## výhonek u stromu po seku vykvete a zmizí. Dokud nejsou seknuté, třpytí se
-## (Treasure Glint z PVFX Foundry) a jemně pulzují, aby hráč poznal, že se do nich dá seknout.
+## Zásah nastaví příznak hádanky a spustí efekt.
 
 @export var flag := ""
 
@@ -14,7 +11,6 @@ var _pulse: Tween
 
 
 func _ready() -> void:
-	# Hádanka už je vyřešená (třeba po smrti hráče)
 	if Game.has_flag(flag):
 		queue_free()
 		return
@@ -34,11 +30,9 @@ func hit(direction: Vector2) -> void:
 	Game.set_flag(flag)
 	$CollisionShape2D.set_deferred("disabled", true)
 	if not _rock.visible:
-		# Výhonek vykvete, strom v přítomnosti vyroste
 		Vfx.spawn(BLOOM, get_parent(), global_position)
 		queue_free()
 		return
-	# Balvan blikne a skutálí se ve směru seku dolů z římsy
 	var side := -1.0 if direction.x < 0.0 else 1.0
 	modulate = Color(2, 2, 2)
 	var tween := create_tween().set_parallel()

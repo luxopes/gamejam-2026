@@ -1,9 +1,9 @@
 extends CanvasLayer
-## Horní lišta: srdíčka podle životů a mince s počtem. Konec hry ukazují titulky (Credits).
+## Zobrazení životů a počtu mincí.
 
 const HEARTS := preload("res://assets/ui/hearts.png")
-const HEART_SIZE := Vector2(17, 15)   ## jedno srdíčko v obrázku (plné, poloviční, prázdné vedle sebe)
-const HEART_SCALE := 3.0              ## zvětšení pixelů srdíčka
+const HEART_SIZE := Vector2(17, 15)
+const HEART_SCALE := 3.0
 
 @onready var _hearts: HBoxContainer = $Bar/Hearts
 @onready var _coin_count: Label = $Bar/CoinRow/Count
@@ -23,7 +23,6 @@ func _on_coins_changed(count: int) -> void:
 
 
 func _on_health_changed(health: int, max_health: int) -> void:
-	# Tolik srdíček, kolik je maximum životů; plná podle aktuálních životů
 	while _hearts.get_child_count() < max_health:
 		var heart := TextureRect.new()
 		heart.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -35,7 +34,6 @@ func _on_health_changed(health: int, max_health: int) -> void:
 		_hearts.get_child(i).texture = _heart(0 if i < health else 2)
 
 
-## Výřez jednoho srdíčka z obrázku: 0 = plné, 1 = poloviční, 2 = prázdné
 func _heart(column: int) -> AtlasTexture:
 	var texture := AtlasTexture.new()
 	texture.atlas = HEARTS

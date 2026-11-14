@@ -1,6 +1,5 @@
 extends CanvasLayer
-## Pauza: Esc zastaví hru a ukáže menu (Resume / Quit to title), Esc znovu pokračuje.
-## Uzel běží i při pauze (process_mode = Always), zbytek hry stojí.
+## Pauza a návrat na úvodní obrazovku. Uzel běží i při pozastavené hře.
 
 const TITLE := "res://scenes/title.tscn"
 

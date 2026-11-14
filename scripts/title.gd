@@ -1,12 +1,11 @@
 extends Control
-## Úvodní obrazovka: Enter nebo mezerník spustí hru od začátku.
+## Spuštění hry z úvodní obrazovky.
 
 @export_file("*.tscn") var first_level := "res://scenes/level_forest.tscn"
 
 
 func _ready() -> void:
 	Game.new_game()
-	# Výzva ke startu bliká a rámeček s ovládáním pulzuje, ať si ho hráč všimne
 	_pulse($Box/Start, 0.25, 0.5)
 	_pulse($Box/Controls, 0.7, 0.9)
 

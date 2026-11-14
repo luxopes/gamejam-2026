@@ -1,18 +1,17 @@
 extends StaticBody2D
-## Překážka v přítomnosti, která se změní podle příznaku z minulosti.
-## Pozice uzlu = střed spodní hrany, překážka roste nahoru o height.
+## Překážka ovládaná příznakem z minulosti.
 
 @export var flag := ""
-@export var appears := false  ## false = po splnění zmizí (zával), true = objeví se (strom)
-## Vzhled: "rocks" = zával z kamenů, "trunk" = kmen stromu s pařezem nahoře
+# true = po splnění se objeví, false = zmizí.
+@export var appears := false
 @export_enum("rocks", "trunk") var look := "rocks"
-@export var height := 200.0  ## výška v px; zával má sahat až ke skále nad ním
+@export var height := 200.0
 
 const TRUNK_WIDTH := 40.0
 const ROCKS_WIDTH := 64.0
 const TILES := preload("res://assets/levels/forest_tiles.tres")
 const ROCK := preload("res://assets/levels/sunnyland/rock.png")
-const ROCK_FILL := [138, 198, 137, 138]   # dlaždice uvnitř závalu
+const ROCK_FILL := [138, 198, 137, 138]
 
 
 func _ready() -> void:
@@ -32,16 +31,14 @@ func _update() -> void:
 	$CollisionShape2D.set_deferred("disabled", not active)
 
 
-## Kolize podle výšky a vzhled poskládaný z hotových assetů Sunnylandu
 func _build() -> void:
 	var trunk := look == "trunk"
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(TRUNK_WIDTH if trunk else ROCKS_WIDTH, height)
 	$CollisionShape2D.shape = shape
+	# Počátek překážky leží uprostřed spodní hrany.
 	$CollisionShape2D.position = Vector2(0, -height / 2.0)
 
-	# Kmen: 3 dlaždice obřího stromu, nahoře travnatý pařez.
-	# Zával: 4 dlaždice, kamenná zátka ze skalních dlaždic s balvany uvnitř.
 	var cols := 3 if trunk else 4
 	var layer := TileMapLayer.new()
 	layer.tile_set = TILES
@@ -57,7 +54,6 @@ func _build() -> void:
 	add_child(layer)
 	if trunk:
 		return
-	# U paty závalu suť z kamenů
 	for side in [-1, 1]:
 		var rock := Sprite2D.new()
 		rock.texture = ROCK

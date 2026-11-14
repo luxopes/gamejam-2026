@@ -1,17 +1,16 @@
 class_name Vfx
 extends Sprite2D
-## Efekt ze sprite sheetu (PVFX Foundry). Přehraje snímky a pak zmizí.
-## Sheet má 8 sloupců, snímky jdou po řádcích zleva doprava.
+## Přehrávání efektů ze sprite sheetů.
 
 @export var frame_count := 8
 @export var fps := 12.5
-@export var free_when_done := true  ## false = jen se skryje a jde spustit znovu (sek)
-@export var loop := false  ## true = přehrává se pořád dokola (třpyt u hádankových věcí)
+# false = efekt se jen skryje a lze ho spustit znovu.
+@export var free_when_done := true
+@export var loop := false
 
 var _time := 0.0
 
 
-## Vytvoří jednorázový efekt v parent (zůstane na místě). flip = -1 efekt zrcadlí.
 static func spawn(scene: PackedScene, parent: Node, at: Vector2, flip := 1.0) -> void:
 	var fx: Node2D = scene.instantiate()
 	fx.scale.x *= flip
@@ -26,7 +25,6 @@ func _ready() -> void:
 		stop()
 
 
-## Spustí efekt od prvního snímku.
 func play() -> void:
 	_time = 0.0
 	frame = 0

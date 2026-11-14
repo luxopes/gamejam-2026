@@ -1,7 +1,6 @@
 extends Area2D
-## Cíl úrovně: truhla ze Sunny Land. Zavřená se třpytí, po dotyku hráče se se zvukem otevře.
+## Otevření truhly a dokončení úrovně.
 
-## Další úroveň. Když zůstane prázdné, hra tady končí výhrou.
 @export_file("*.tscn") var next_scene := ""
 
 const FEEDBACK := preload("res://scenes/vfx/item_feedback.tscn")

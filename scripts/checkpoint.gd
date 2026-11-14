@@ -1,10 +1,8 @@
 extends Area2D
-## Checkpoint. Po dotyku si hra pamatuje tohle místo, po smrti tu hráč začne.
-## Taky přidá hráči život, každý checkpoint jen jednou za život (jinak by šlo
-## chodit tam a zpátky a dobít se do plna).
+## Checkpoint ukládá místo návratu a jednou přidá životy.
 
-@export var active_color := Color(1.0, 0.85, 0.3)  ## barva po aktivaci
-@export var heal_amount := 1                        ## kolik životů přidá
+@export var active_color := Color(1.0, 0.85, 0.3)
+@export var heal_amount := 1
 
 var _healed := false
 
@@ -12,8 +10,7 @@ var _healed := false
 
 
 func _ready() -> void:
-	# Po návratu na tenhle checkpoint je rovnou aktivní a neléčí (hráč se na něm
-	# objevil, jinak by si po pádu do jámy hned přidal život)
+	# Návrat na checkpoint nesmí znovu přidat život.
 	if Game.get_checkpoint(owner) == global_position:
 		_flag.color = active_color
 		_healed = true

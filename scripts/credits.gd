@@ -1,10 +1,8 @@
 extends CanvasLayer
-## Závěrečná obrazovka: hned po výhře ztmavne pozadí a titulky pomalu vyjedou zdola
-## nahoru až k poděkování. R (hrát znovu) jde až po doběhnutí titulků.
-## Text titulků je podle README (Zdroje assetů).
+## Závěrečné titulky; restart se povolí po jejich doběhnutí.
 
-@export var fade_time := 1.0        ## ztmavení pozadí (s)
-@export var scroll_speed := 60.0    ## rychlost titulků (px/s)
+@export var fade_time := 1.0
+@export var scroll_speed := 60.0
 
 @onready var _back: ColorRect = $Back
 @onready var _text: Label = $Text
@@ -22,7 +20,7 @@ func _roll() -> void:
 	_text.position.y = screen.y
 	_back.modulate.a = 0.0
 	show()
-	# Titulky jedou, dokud poděkování na konci nebude uprostřed obrazovky
+	# Poslední řádek titulků zůstane uprostřed obrazovky.
 	var end_y := screen.y * 0.5 - _text.size.y + _text.get_line_height()
 	var tween := create_tween()
 	tween.tween_property(_back, "modulate:a", 1.0, fade_time)

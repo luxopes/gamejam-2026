@@ -1,55 +1,54 @@
 extends CharacterBody2D
-## Hráč. Všechna čísla níže jdou měnit v Inspektoru (klikni na uzel Player).
+## Pohyb, boj a kamera hráče.
 
-## Pro HUD: zavolá se při každé změně životů.
 signal health_changed(health: int, max_health: int)
 
-@export var speed := 300.0            ## rychlost běhu (px/s)
-@export var acceleration := 2500.0    ## jak rychle se rozběhne a zastaví
-@export var jump_velocity := -560.0   ## síla skoku (záporné = nahoru)
+@export var speed := 300.0
+@export var acceleration := 2500.0
+@export var jump_velocity := -560.0
 @export var gravity := 1300.0
-@export var coyote_time := 0.1        ## jak dlouho po opuštění hrany jde ještě skočit
-@export var jump_buffer := 0.1        ## jak dlouho před dopadem si hra pamatuje stisk skoku
-@export var fall_limit_y := 1000.0    ## pod touto výškou hráč umírá
+@export var coyote_time := 0.1
+@export var jump_buffer := 0.1
+@export var fall_limit_y := 1000.0
 
 @export_group("Životy")
 @export var max_health := 5
-@export var coins_per_heal := 3       ## za kolik sebraných mincí přibude život
-@export var invulnerable_time := 1.0  ## nezranitelnost po zásahu (s)
-@export var hurt_knockback := Vector2(300.0, -350.0)  ## odhození po zásahu (do strany, nahoru)
-@export var hurt_stun := 0.25         ## jak dlouho po zásahu nejde ovládat (s)
+@export var coins_per_heal := 3
+@export var invulnerable_time := 1.0
+@export var hurt_knockback := Vector2(300.0, -350.0)
+@export var hurt_stun := 0.25
 
 @export_group("Útok")
-@export var attack_duration := 0.1    ## jak dlouho sek zasahuje (s)
-@export var attack_cooldown := 0.35   ## pauza mezi seky (s)
-@export var pogo_velocity := -520.0   ## odraz nahoru po seku dolů do bodáků/nepřítele
-@export var recoil_speed := 260.0     ## odhození dozadu po seku do strany
-@export var recoil_time := 0.12       ## jak dlouho odhození přebije ovládání (s)
-@export var up_recoil := 150.0        ## sražení dolů po seku nahoru
-@export var vertical_attack_width := 32.0  ## šířka seku nahoru/dolů = šířka hráče (sek do strany má 56)
+@export var attack_duration := 0.1
+@export var attack_cooldown := 0.35
+@export var pogo_velocity := -520.0
+@export var recoil_speed := 260.0
+@export var recoil_time := 0.12
+@export var up_recoil := 150.0
+@export var vertical_attack_width := 32.0
 
 @export_group("Dash")
-@export var dash_speed := 900.0       ## rychlost dashe (px/s)
-@export var dash_time := 0.18         ## jak dlouho dash trvá (s)
-@export var dash_cooldown := 0.5      ## pauza mezi dashi (s)
+@export var dash_speed := 900.0
+@export var dash_time := 0.18
+@export var dash_cooldown := 0.5
 
 @export_group("Rozhlížení")
-@export var look_delay := 0.4         ## jak dlouho držet W/S, než se kamera pohne (s)
-@export var look_distance := 180.0    ## o kolik se kamera posune nahoru/dolů (px)
-@export var look_speed := 600.0       ## jak rychle kamera sjede (px/s)
+@export var look_delay := 0.4
+@export var look_distance := 180.0
+@export var look_speed := 600.0
 
 @export_group("Efekty")
-@export var landing_dust_speed := 400.0  ## od jaké rychlosti pádu se při dopadu zvedne prach (px/s)
-@export var sprite_faces_left := false   ## kam kouká postava ve sheetu (poutník kouká doprava)
-@export var shake_strength := 4.0        ## otřes kamery při zásahu a pogu (px)
-@export var shake_time := 0.15           ## jak dlouho otřes trvá (s)
-@export var hit_stop_time := 0.06        ## zamrznutí hry při zásahu nepřítele (s)
-@export var jump_stretch := Vector2(0.8, 1.2)   ## natažení postavy při odrazu (šířka, výška)
-@export var land_squash := Vector2(1.25, 0.8)   ## zmáčknutí postavy při dopadu
-@export var land_squash_speed := 200.0   ## od jaké rychlosti pádu se postava při dopadu zmáčkne (px/s)
-@export var squash_time := 0.15          ## jak rychle se postava vrátí do normálu (s)
+@export var landing_dust_speed := 400.0
+@export var sprite_faces_left := false
+@export var shake_strength := 4.0
+@export var shake_time := 0.15
+@export var hit_stop_time := 0.06
+@export var jump_stretch := Vector2(0.8, 1.2)
+@export var land_squash := Vector2(1.25, 0.8)
+@export var land_squash_speed := 200.0
+@export var squash_time := 0.15
 
-const WALL_REACH := 64.0   # kam až sek do strany dosáhne na zeď (konec oblasti seku)
+const WALL_REACH := 64.0
 const ATTACKS := {"attack_up": Vector2.UP, "attack_down": Vector2.DOWN,
 		"attack_left": Vector2.LEFT, "attack_right": Vector2.RIGHT}
 const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
@@ -62,22 +61,22 @@ const SWORD_SOUND := preload("res://assets/sfx/sword.wav")
 
 var _coyote := 0.0
 var _buffer := 0.0
-var _jumping := false   # true jen u normálního skoku, aby šlo zkrátit puštěním klávesy
-var _facing := 1.0      # 1 = doprava, -1 = doleva
+var _jumping := false
+var _facing := 1.0
 var _attack_timer := 0.0
 var _cooldown_timer := 0.0
 var _attack_dir := Vector2.RIGHT
 var _already_hit: Array[Node] = []
-var _recoiled := false   # odraz po zásahu jen jednou za sek
+var _recoiled := false
 var _hit_wall := false
 var _recoil_timer := 0.0
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
-var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo pogo
+var _can_air_dash := true
 var _dead := false
 var _invulnerable_timer := 0.0
 var _look_timer := 0.0
-var _look_offset := 0.0      # posun kamery od rozhlížení
+var _look_offset := 0.0
 var _shake_timer := 0.0
 var _squash_tween: Tween
 
@@ -93,11 +92,9 @@ var _squash_tween: Tween
 
 
 func _ready() -> void:
-	# Po smrti začíná hráč na posledním checkpointu
 	var spawn = Game.get_checkpoint(owner)
 	if spawn != null:
 		global_position = spawn
-	# Po pádu do jámy se stejnými životy, po smrti na 0 životů s plnými
 	if Game.respawn_health > 0:
 		health = Game.respawn_health
 		Game.respawn_health = 0
@@ -114,7 +111,6 @@ func _physics_process(delta: float) -> void:
 		_update_animation()
 		return
 
-	# Gravitace
 	if is_on_floor():
 		_coyote = coyote_time
 		_can_air_dash = true
@@ -124,7 +120,6 @@ func _physics_process(delta: float) -> void:
 	if velocity.y >= 0.0:
 		_jumping = false
 
-	# Skok
 	if Input.is_action_just_pressed("jump"):
 		_buffer = jump_buffer
 	else:
@@ -137,12 +132,11 @@ func _physics_process(delta: float) -> void:
 		Vfx.spawn(DUST_PUFF, get_parent(), global_position)
 		Sfx.play(JUMP_SOUND, -8.0)
 		_squash(jump_stretch)
-	# Krátký stisk = nižší skok (pogo se tím nezkracuje)
+	# Puštění klávesy zkrátí běžný skok, ne odraz od nepřítele.
 	if Input.is_action_just_released("jump") and _jumping and velocity.y < 0.0:
 		velocity.y *= 0.5
 		_jumping = false
 
-	# Pohyb do stran (během odhození po seku hráč neovládá)
 	var direction := Input.get_axis("move_left", "move_right")
 	if direction != 0.0 and _attack_timer <= 0.0:
 		_facing = signf(direction)
@@ -169,7 +163,6 @@ func _physics_process(delta: float) -> void:
 func _update_attack(delta: float) -> void:
 	_cooldown_timer -= delta
 	if _cooldown_timer <= 0.0:
-		# Šipka spustí sek přímo ve svém směru, nezávisle na pohybu.
 		for action in ATTACKS:
 			if Input.is_action_just_pressed(action):
 				_start_attack(ATTACKS[action])
@@ -185,7 +178,6 @@ func _start_attack(direction: Vector2) -> void:
 	if direction.x != 0.0:
 		_facing = direction.x
 	_attack_area.rotation = _attack_dir.angle()
-	# Sek nahoru/dolů je užší, aby pogo nešlo od bodáků vedle hráče
 	_attack_shape.shape.size = _side_attack_size
 	if direction.x == 0.0:
 		_attack_shape.shape.size.y = vertical_attack_width
@@ -199,8 +191,7 @@ func _start_attack(direction: Vector2) -> void:
 
 
 func _check_hits() -> void:
-	# Ptá se fyziky přímo s aktuálním otočením a velikostí seku; dotyky oblasti
-	# (get_overlapping_*) by v prvním snímku platily ještě pro minulý sek.
+	# Area2D by v prvním snímku vracela dotyky předchozího seku.
 	var query := PhysicsShapeQueryParameters2D.new()
 	query.shape = _attack_shape.shape
 	query.transform = _attack_shape.global_transform
@@ -218,32 +209,29 @@ func _check_hits() -> void:
 		Vfx.spawn(HIT_SPARK, get_parent(), _attack_area.global_position + _attack_dir * 40.0)
 		_shake_timer = shake_time
 		if hittable and target.is_in_group("hurts_player"):
-			_hit_stop()   # nepřítel (bodáky nemají hit(), krystal a páka nezraňují)
+			_hit_stop()
 		if hittable:
 			target.hit(_attack_dir)
 		_apply_hit_reaction()
 
-	# Zeď: sek do strany se od ní odrazí jako v Hollow Knight. Paprsek jde ve výšce
-	# hrudi, aby se nepočítala podlaha, o kterou spodek seku vždycky zavadí.
 	if _attack_dir.x != 0.0 and not _hit_wall:
+		# Paprsek ve výšce hrudi vynechá podlahu, o kterou oblast seku zavadí.
 		var from := _attack_area.global_position
 		var ray := PhysicsRayQueryParameters2D.create(from, from + _attack_dir * WALL_REACH, 1, [get_rid()])
 		var wall := get_world_2d().direct_space_state.intersect_ray(ray)
-		# Terén z dlaždic je TileMapLayer, překážky (zával, kmen) StaticBody2D
 		if wall and (wall.collider is StaticBody2D or wall.collider is TileMapLayer):
 			_hit_wall = true
 			Vfx.spawn(HIT_SPARK, get_parent(), wall.position)
 			_apply_hit_reaction()
 
 
-## Odraz hráče po zásahu, jednou za sek.
 func _apply_hit_reaction() -> void:
+	# Odraz platí jednou za sek, i když zasáhne víc cílů.
 	if _recoiled:
 		return
 	_recoiled = true
 	match _attack_dir:
 		Vector2.DOWN:
-			# Pogo jen ve vzduchu; sek dolů na zemi se přehraje, ale neodrazí
 			if is_on_floor():
 				return
 			velocity.y = pogo_velocity
@@ -257,8 +245,6 @@ func _apply_hit_reaction() -> void:
 			_recoil_timer = recoil_time
 
 
-## Dash jako v Hollow Knight: rychle vodorovně, bez gravitace, pevná délka.
-## Vrací true, dokud dash běží (pak se normální pohyb přeskočí).
 func _update_dash(delta: float) -> bool:
 	_dash_cooldown_timer -= delta
 	if _dash_timer <= 0.0 and Input.is_action_just_pressed("dash") \
@@ -267,12 +253,11 @@ func _update_dash(delta: float) -> bool:
 		if direction != 0.0:
 			_facing = signf(direction)
 		if is_on_floor():
-			Vfx.spawn(DASH_DUST, get_parent(), global_position, -_facing)   # prach zůstává za hráčem
+			Vfx.spawn(DASH_DUST, get_parent(), global_position, -_facing)
 		else:
 			_can_air_dash = false
 		_dash_timer = dash_time
 		_dash_cooldown_timer = dash_cooldown
-		# Dash zruší rozběhnutý sek a skok
 		_attack_timer = 0.0
 		_slash.stop()
 		_recoil_timer = 0.0
@@ -287,7 +272,6 @@ func _update_dash(delta: float) -> bool:
 	velocity = Vector2(_facing * dash_speed, 0.0)
 	move_and_slide()
 	if _dash_timer <= 0.0:
-		# Na konci dashe prudce zpomalí na běžnou rychlost
 		velocity.x = _facing * speed
 		modulate = Color.WHITE
 	if global_position.y > fall_limit_y:
@@ -295,8 +279,6 @@ func _update_dash(delta: float) -> bool:
 	return true
 
 
-## Rozhlížení jako v Hollow Knight: hráč stojí na zemi a drží W/S,
-## po chvilce kamera sjede nahoru/dolů. Jakýkoli pohyb ji vrátí.
 func _update_look(delta: float) -> void:
 	var look := Input.get_axis("move_up", "move_down")
 	var standing := is_on_floor() and absf(velocity.x) < 1.0 \
@@ -312,7 +294,6 @@ func _update_look(delta: float) -> void:
 		target = signf(look) * look_distance
 	_look_offset = move_toward(_look_offset, target, look_speed * delta)
 
-	# Otřes po zásahu slábne, jak běží čas
 	var shake := Vector2.ZERO
 	if _shake_timer > 0.0:
 		_shake_timer -= delta
@@ -321,18 +302,15 @@ func _update_look(delta: float) -> void:
 	_camera.offset = Vector2(0.0, _look_offset) + shake
 
 
-## Krátké zamrznutí hry při zásahu nepřítele. Čas vrací časovač, který zpomalení
-## nepodléhá, takže se hra nezasekne, ani když hráč mezitím zmizí (nové načtení úrovně).
 func _hit_stop() -> void:
 	if hit_stop_time <= 0.0 or Engine.time_scale == 0.0:
 		return
 	Engine.time_scale = 0.0
+	# Časovač ignoruje time_scale a přežije zánik hráče.
 	get_tree().create_timer(hit_stop_time, true, false, true).timeout.connect(
 			Engine.set.bind("time_scale", 1.0))
 
 
-## Zmáčknutí/natažení postavy (jen vzhled, hitbox zůstává). Sprite má počátek
-## u nohou, takže postava zůstane stát na zemi.
 func _squash(amount: Vector2) -> void:
 	if _squash_tween:
 		_squash_tween.kill()
@@ -342,12 +320,10 @@ func _squash(amount: Vector2) -> void:
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
-## Zranění od čehokoli ve skupině "hurts_player" (bodáky, nepřátelé).
-## Kontroluje se každý snímek, takže zraní i to, v čem hráč stojí po konci nezranitelnosti.
 func _update_hurt(delta: float) -> void:
 	if _invulnerable_timer > 0.0:
 		_invulnerable_timer -= delta
-		modulate.a = 0.3 if fmod(_invulnerable_timer, 0.2) < 0.1 else 1.0  # blikání
+		modulate.a = 0.3 if fmod(_invulnerable_timer, 0.2) < 0.1 else 1.0
 		if _invulnerable_timer <= 0.0:
 			modulate.a = 1.0
 			_coin_heal()
@@ -373,30 +349,25 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 		return
 
 	_invulnerable_timer = invulnerable_time
-	# Odhodí hráče od zdroje zranění a na chvíli mu vezme ovládání
 	var away := signf(global_position.x - from_position.x)
 	if away == 0.0:
 		away = -_facing
 	velocity = Vector2(away * hurt_knockback.x, hurt_knockback.y)
 	_recoil_timer = hurt_stun
 	_dash_timer = 0.0
-	modulate = Color.WHITE   # zásah utne dash, vrátí barvu z dashe
+	modulate = Color.WHITE
 	_jumping = false
 
 
-## Doplní životy (třeba na checkpointu), nejvýš do maxima.
 func heal(amount: int) -> void:
 	health = mini(health + amount, max_health)
 	health_changed.emit(health, max_health)
 
 
-## Po sebrání mince zkusí uzdravit.
 func coin_collected() -> void:
 	_coin_heal()
 
 
-## Za každých pár mincí přidá život, jakmile nějaký chybí
-## (hned při sebrání, po zranění nebo po návratu na checkpoint).
 func _coin_heal() -> void:
 	if _dead or health >= max_health or Game.coins < coins_per_heal:
 		return
@@ -406,9 +377,6 @@ func _coin_heal() -> void:
 	Vfx.spawn(HOLY_HEAL, self, global_position)   # efekt letí s hráčem
 
 
-## Animace postavy podle stavu (SpriteFrames v uzlu Sprite):
-## idle, run, jump, fall, dash, look_up, look_down. Volitelně attack, attack_up
-## a attack_down; dokud nejsou, při seku běží dál pohybová animace.
 func _update_animation() -> void:
 	var anim := "idle"
 	if _dash_timer > 0.0:
@@ -442,13 +410,13 @@ func die() -> void:
 	if _dead:
 		return
 	_dead = true
-	set_physics_process(false)   # hráč zamrzne, už se nedá ovládat
-	Game.respawn_health = health   # pád do jámy: zbylé životy; smrt na 0: plné
+	set_physics_process(false)
+	Game.respawn_health = health
 
 	var tween := create_tween()
-	tween.set_parallel()         # obě změny běží současně
-	tween.tween_property(self, "modulate:a", 0.0, 0.4)        # zprůhlední
-	tween.tween_property(self, "scale", Vector2(1.8, 0.1), 0.4)  # rozplácne se
+	tween.set_parallel()
+	tween.tween_property(self, "modulate:a", 0.0, 0.4)
+	tween.tween_property(self, "scale", Vector2(1.8, 0.1), 0.4)
 	await tween.finished
 
 	Game.restart_level()
