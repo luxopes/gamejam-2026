@@ -14,6 +14,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		Game.add_coin(self)
+		body.coin_collected()
 		Vfx.spawn(FEEDBACK, get_parent(), global_position)
 		Sfx.play(SOUND)
 		queue_free()

@@ -14,6 +14,7 @@ signal health_changed(health: int, max_health: int)
 
 @export_group("Životy")
 @export var max_health := 5
+@export var coins_per_heal := 3       ## za kolik sebraných mincí přibude život
 @export var invulnerable_time := 1.0  ## nezranitelnost po zásahu (s)
 @export var hurt_knockback := Vector2(300.0, -350.0)  ## odhození po zásahu (do strany, nahoru)
 @export var hurt_stun := 0.25         ## jak dlouho po zásahu nejde ovládat (s)
@@ -55,6 +56,7 @@ const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
 const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
 const DUST_PUFF := preload("res://scenes/vfx/dust_puff.tscn")
+const BLOOM_HEAL := preload("res://scenes/vfx/bloom_heal.tscn")
 const JUMP_SOUND := preload("res://assets/sfx/jump.wav")
 const SWORD_SOUND := preload("res://assets/sfx/sword.wav")
 
@@ -100,6 +102,7 @@ func _ready() -> void:
 		health = Game.respawn_health
 		Game.respawn_health = 0
 	health_changed.emit(health, max_health)
+	_coin_heal.call_deferred()
 
 
 func _physics_process(delta: float) -> void:
@@ -347,6 +350,7 @@ func _update_hurt(delta: float) -> void:
 		modulate.a = 0.3 if fmod(_invulnerable_timer, 0.2) < 0.1 else 1.0  # blikání
 		if _invulnerable_timer <= 0.0:
 			modulate.a = 1.0
+			_coin_heal()
 		return
 
 	var sources: Array[Node2D] = []
@@ -384,6 +388,22 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 func heal(amount: int) -> void:
 	health = mini(health + amount, max_health)
 	health_changed.emit(health, max_health)
+
+
+## Sebraná mince se ušetří na uzdravení.
+func coin_collected() -> void:
+	Game.heal_coins += 1
+	_coin_heal()
+
+
+## Za každých pár ušetřených mincí přidá život, jakmile nějaký chybí
+## (hned při sebrání, po zranění nebo po návratu na checkpoint).
+func _coin_heal() -> void:
+	if _dead or health >= max_health or Game.heal_coins < coins_per_heal:
+		return
+	Game.heal_coins -= coins_per_heal
+	heal(1)
+	Vfx.spawn(BLOOM_HEAL, get_parent(), global_position)
 
 
 ## Animace postavy podle stavu (SpriteFrames v uzlu Sprite):
