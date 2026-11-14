@@ -4,6 +4,7 @@ extends Node
 signal coins_changed(count: int)
 signal level_finished
 signal time_changed(time: String)
+signal flag_changed(flag: String)
 
 var time := "present"
 
@@ -12,6 +13,16 @@ func set_time(new_time: String) -> void:
 	time_changed.emit(time)
 	
 var coins := 0
+var flags := {}
+
+func set_flag(flag: String) -> void:
+	flags[flag] = true
+	flag_changed.emit(flag)
+
+
+func has_flag(flag: String) -> bool:
+	return flags.has(flag)
+
 
 # Poslední checkpoint: ve které úrovni, kde a v jakém čase. Prázdné = začátek úrovně.
 var _checkpoint_level := ""
@@ -49,6 +60,7 @@ func restart_level() -> void:
 
 ## Zavolá cíl. Když je next_scene prázdné, hra končí výhrou.
 func finish_level(next_scene: String) -> void:
+	flags.clear()
 	_checkpoint_level = ""
 	if next_scene == "":
 		level_finished.emit()
