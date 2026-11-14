@@ -34,6 +34,8 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/enemy.tscn` | nepřítel: chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
 | `scenes/goal.tscn` | cíl úrovně |
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
+| `scenes/vfx/` + `scripts/vfx.gd` | efekty: sek, zásah, zranění, dash, prach ze skoku a dopadu |
+| `assets/vfx/` | obrázky efektů (viz Zdroje assetů) |
 | `scripts/game.gd` | globální stav (`Game`): mince, restart, přechod do další úrovně |
 
 ## Nejčastější úpravy
@@ -53,8 +55,21 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 - **Životy:** hráč má 5 životů, po zásahu chvíli bliká a je nezranitelný.
   Po smrti začíná na posledním checkpointu. Čísla jsou u `Player` ve skupině
   **Životy**, pro HUD je připravený signál `health_changed`.
+- **Sprite postavy:** v `player.tscn` vyber uzel `Sprite` (AnimatedSprite2D),
+  v Inspektoru u `Sprite Frames` vytvoř nové SpriteFrames a přidej animace
+  `idle`, `run`, `jump`, `fall`, `attack` a `dash` (volitelně `attack_up`
+  a `attack_down`). Kód je přepíná sám a otáčí postavu podle směru. Jakmile má
+  `Sprite` animace, náhradní červený obdélník se sám schová.
 - **Útok na nepřítele:** když má objekt funkci `hit(direction)`, sek ji zavolá.
   Když je ve skupině `pogo`, hráč se od něj sekem dolů odrazí (vzor: `enemy.tscn`).
+
+## Zdroje assetů
+
+| Co | Zdroj | Licence |
+|---|---|---|
+| `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff` | CC0 1.0 |
+
+VFX from PVFX Foundry by Pixel VFX Studio.
 
 ## Práce v týmu
 
