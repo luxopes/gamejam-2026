@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/vfx.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/vfx/hit_spark.png" id="2"]
+
+[node name="HitSpark" type="Sprite2D"]
+texture_filter = 1
+scale = Vector2(1, 1)
+texture = ExtResource("2")
+centered = false
+offset = Vector2(-32, -32)
+hframes = 8
+vframes = 1
+script = ExtResource("1")
+frame_count = 8
+fps = 25.0
