@@ -25,7 +25,8 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 
 | Soubor | K čemu je |
 |---|---|
-| `scenes/level_1.tscn` | první úroveň, tady se staví |
+| `scenes/level_1.tscn` | původní zkušební úroveň |
+| `scenes/level_forest.tscn` | hlavní úroveň (části 1–4 a šachta). Generuje ji Antonínův nástroj, ručně ji neupravuj (změny se přepíšou), změny v úrovni hlas Antonínovi |
 | `scenes/player.tscn` + `scripts/player.gd` | hráč (pohyb, skok, kamera) |
 | `scenes/platform.tscn` | plošina, velikost a barva se nastavují v Inspektoru |
 | `scenes/coin.tscn` | mince |
