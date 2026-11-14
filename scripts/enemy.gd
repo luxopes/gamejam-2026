@@ -4,7 +4,7 @@ extends CharacterBody2D
 
 @export var walk_speed := 80.0          ## rychlost chůze (px/s)
 @export var gravity := 1300.0
-@export var health := 3                 ## kolik seků vydrží
+@export var health := 5                 ## kolik seků vydrží (stejně jako životy hráče)
 @export var knockback_speed := 700.0    ## jak rychle odletí po zásahu (px/s)
 @export var knockback_lift := 200.0     ## jak moc ho sek z boku nadhodí
 @export var knockback_time := 0.35      ## jak dlouho letí, než zase chodí (s)
