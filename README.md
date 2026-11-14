@@ -13,7 +13,10 @@ všechno jsou barevné obdélníky, takže se dá cokoli hned vyměnit za vlastn
 | Akce | Klávesy | Gamepad |
 |---|---|---|
 | Pohyb | A / D nebo šipky | páčka, kříž |
-| Skok | Mezerník, W, šipka nahoru | A |
+| Skok | Mezerník | A |
+| Útok (sek) | levé tlačítko myši | X |
+| Dash | Shift | RB |
+| Míření nahoru / dolů | W / S nebo šipky | páčka, kříž |
 | Restart | R | Back |
 
 Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
@@ -27,6 +30,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/platform.tscn` | plošina, velikost a barva se nastavují v Inspektoru |
 | `scenes/coin.tscn` | mince |
 | `scenes/hazard.tscn` | bodáky, dotyk = restart úrovně |
+| `scenes/enemy.tscn` | nepřítel: chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
 | `scenes/goal.tscn` | cíl úrovně |
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
 | `scripts/game.gd` | globální stav (`Game`): mince, restart, přechod do další úrovně |
@@ -45,6 +49,8 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
   místo něj `Sprite2D` nebo `AnimatedSprite2D`. Kolize zůstávají.
 - **Nový nepřítel nebo past:** zkopíruj `hazard.tscn`; kdo zavolá `body.die()`,
   zabije hráče.
+- **Útok na nepřítele:** když má objekt funkci `hit(direction)`, sek ji zavolá.
+  Když je ve skupině `pogo`, hráč se od něj sekem dolů odrazí (vzor: `enemy.tscn`).
 
 ## Práce v týmu
 
