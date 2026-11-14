@@ -14,7 +14,7 @@ všechno jsou barevné obdélníky, takže se dá cokoli hned vyměnit za vlastn
 |---|---|---|
 | Pohyb | A / D nebo šipky | páčka, kříž |
 | Skok | Mezerník | A |
-| Útok (sek) | levé tlačítko myši | X |
+| Útok (sek) | levé tlačítko myši nebo J | X |
 | Dash | Shift | RB |
 | Míření nahoru / dolů | W / S nebo šipky | páčka, kříž |
 | Restart | R | Back |
