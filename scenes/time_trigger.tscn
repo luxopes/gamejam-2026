@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dcccdquejbg5u" path="res://scripts/time_trigger.gd" id="1_np8tt"]
 [ext_resource type="Texture2D" path="res://assets/levels/sunnyland/tileset.png" id="2_tiles"]
 [ext_resource type="Texture2D" path="res://assets/levels/sunnyland/plant.png" id="3_plant"]
+[ext_resource type="PackedScene" path="res://scenes/vfx/treasure_glint.tscn" id="4_glint"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rune"]
 atlas = ExtResource("2_tiles")
@@ -24,6 +25,9 @@ visible = false
 use_parent_material = true
 position = Vector2(0, -18)
 texture = ExtResource("3_plant")
+
+[node name="Glint" parent="." unique_id=1688943703 instance=ExtResource("4_glint")]
+position = Vector2(0, -22)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=407299032]
 position = Vector2(0, -24)

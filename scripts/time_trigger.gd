@@ -1,13 +1,15 @@
 extends Area2D
 ## Spouštěč v minulosti. Po zásahu sekem nastaví příznak.
 ## Balvan (flag "balvan", vytesaný kámen se sluncem) se po zásahu skutálí z římsy,
-## ostatní spouštěče (výhonek u stromu) jen zmizí. Dokud nejsou seknuté, jemně pulzují,
-## aby hráč poznal, že se do nich dá seknout.
+## výhonek u stromu po seku vykvete a zmizí. Dokud nejsou seknuté, třpytí se
+## (Treasure Glint z PVFX Foundry) a jemně pulzují, aby hráč poznal, že se do nich dá seknout.
 
 @export var flag := ""
 
 var _used := false
 var _pulse: Tween
+
+const BLOOM := preload("res://scenes/vfx/bloom_heal.tscn")
 
 @onready var _rock: Sprite2D = $Rock
 @onready var _sprout: Sprite2D = $Sprout
@@ -32,9 +34,14 @@ func hit(direction: Vector2) -> void:
 		return
 	_used = true
 	_pulse.kill()
+	$Glint.queue_free()
 	Game.set_flag(flag)
 	$CollisionShape2D.set_deferred("disabled", true)
 	if not _rock.visible:
+		# Výhonek vykvete, strom v přítomnosti vyroste
+		var bloom := BLOOM.instantiate()
+		get_parent().add_child(bloom)
+		bloom.global_position = global_position
 		queue_free()
 		return
 	# Balvan blikne a skutálí se ve směru seku dolů z římsy

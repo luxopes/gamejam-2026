@@ -6,6 +6,7 @@ extends Sprite2D
 @export var frame_count := 8
 @export var fps := 12.5
 @export var free_when_done := true  ## false = jen se skryje a jde spustit znovu (sek)
+@export var loop := false  ## true = přehrává se pořád dokola (třpyt u hádankových věcí)
 
 var _time := 0.0
 
@@ -33,7 +34,9 @@ func stop() -> void:
 func _process(delta: float) -> void:
 	_time += delta
 	var next := int(_time * fps)
-	if next < frame_count:
+	if loop:
+		frame = next % frame_count
+	elif next < frame_count:
 		frame = next
 	elif free_when_done:
 		queue_free()
