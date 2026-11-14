@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://8buwgsbrkwc1"]
 
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://5q0dk48gdukk" path="res://scripts/time_world.gd" id="1_pa8r4"]
 [ext_resource type="PackedScene" path="res://scenes/platform.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://ghoj7537x54f" path="res://scenes/portal.tscn" id="2_15mv3"]
 [ext_resource type="PackedScene" path="res://scenes/coin.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://0t06iekngmp2" path="res://scenes/hazard.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/goal.tscn" id="5"]
@@ -9,60 +11,111 @@
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="7"]
 
 [node name="Level1" type="Node2D" unique_id=635269604]
+script = ExtResource("1_pa8r4")
 
-[node name="Platforms" type="Node2D" parent="." unique_id=1360704054]
+[node name="Present" type="Node2D" parent="." unique_id=1728303134]
 
-[node name="FloorLeft" parent="Platforms" unique_id=2108979309 instance=ExtResource("2")]
+[node name="Portal" parent="Present" unique_id=1740757390 instance=ExtResource("2_15mv3")]
+position = Vector2(1100, 600)
+
+[node name="Platforms" type="Node2D" parent="Present" unique_id=1360704054]
+
+[node name="FloorLeft" parent="Present/Platforms" unique_id=2108979309 instance=ExtResource("2")]
 position = Vector2(0, 600)
 size = Vector2(1200, 120)
 
-[node name="FloorRight" parent="Platforms" unique_id=2076769242 instance=ExtResource("2")]
+[node name="FloorRight" parent="Present/Platforms" unique_id=2076769242 instance=ExtResource("2")]
 position = Vector2(1360, 600)
 size = Vector2(1000, 120)
 
-[node name="WallLeft" parent="Platforms" unique_id=569903256 instance=ExtResource("2")]
+[node name="WallLeft" parent="Present/Platforms" unique_id=569903256 instance=ExtResource("2")]
 position = Vector2(-38, 0)
 size = Vector2(40, 720)
 
-[node name="WallRight" parent="Platforms" unique_id=1182497062 instance=ExtResource("2")]
+[node name="WallRight" parent="Present/Platforms" unique_id=1182497062 instance=ExtResource("2")]
 position = Vector2(2360, 0)
 size = Vector2(40, 720)
 
-[node name="Step1" parent="Platforms" unique_id=1421788884 instance=ExtResource("2")]
+[node name="Step1" parent="Present/Platforms" unique_id=1421788884 instance=ExtResource("2")]
 position = Vector2(400, 510)
 
-[node name="Step2" parent="Platforms" unique_id=539878959 instance=ExtResource("2")]
+[node name="Step2" parent="Present/Platforms" unique_id=539878959 instance=ExtResource("2")]
 position = Vector2(700, 420)
 
-[node name="Step3" parent="Platforms" unique_id=534647170 instance=ExtResource("2")]
+[node name="Step3" parent="Present/Platforms" unique_id=534647170 instance=ExtResource("2")]
 position = Vector2(1000, 330)
 
-[node name="Coins" type="Node2D" parent="." unique_id=1172706159]
+[node name="Coins" type="Node2D" parent="Present" unique_id=1172706159]
 
-[node name="Coin1" parent="Coins" unique_id=2069637906 instance=ExtResource("3")]
+[node name="Coin1" parent="Present/Coins" unique_id=2069637906 instance=ExtResource("3")]
 position = Vector2(500, 470)
 
-[node name="Coin2" parent="Coins" unique_id=454997296 instance=ExtResource("3")]
+[node name="Coin2" parent="Present/Coins" unique_id=454997296 instance=ExtResource("3")]
 position = Vector2(800, 380)
 
-[node name="Coin3" parent="Coins" unique_id=1873577162 instance=ExtResource("3")]
+[node name="Coin3" parent="Present/Coins" unique_id=1873577162 instance=ExtResource("3")]
 position = Vector2(1100, 290)
 
-[node name="Coin4" parent="Coins" unique_id=929171044 instance=ExtResource("3")]
+[node name="Coin4" parent="Present/Coins" unique_id=929171044 instance=ExtResource("3")]
 position = Vector2(1280, 460)
 
-[node name="Hazards" type="Node2D" parent="." unique_id=1523307411]
+[node name="Hazards" type="Node2D" parent="Present" unique_id=1523307411]
 
-[node name="Hazard1" parent="Hazards" unique_id=1916625067 instance=ExtResource("4")]
+[node name="Hazard1" parent="Present/Hazards" unique_id=1916625067 instance=ExtResource("4")]
 position = Vector2(1700, 600)
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Enemies" type="Node2D" parent="Present"]
 
-[node name="Enemy1" parent="Enemies" instance=ExtResource("7")]
+[node name="Enemy1" parent="Present/Enemies" instance=ExtResource("7")]
 position = Vector2(300, 600)
 
-[node name="Goal" parent="." unique_id=1783578996 instance=ExtResource("5")]
+[node name="Goal" parent="Present" unique_id=1783578996 instance=ExtResource("5")]
 position = Vector2(2250, 600)
+
+[node name="Past" type="Node2D" parent="." unique_id=1111454803]
+
+[node name="Portal" parent="Past" unique_id=1247327977 instance=ExtResource("2_15mv3")]
+position = Vector2(1500, 600)
+target_time = "present"
+
+[node name="Platforms" type="Node2D" parent="Past" unique_id=2034822642]
+
+[node name="FloorLeft" parent="Past/Platforms" unique_id=334910232 instance=ExtResource("2")]
+position = Vector2(0, 600)
+size = Vector2(1200, 120)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="Bridge" parent="Past/Platforms" unique_id=142288022 instance=ExtResource("2")]
+position = Vector2(1200, 600)
+size = Vector2(160, 30)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="FloorRight" parent="Past/Platforms" unique_id=446325573 instance=ExtResource("2")]
+position = Vector2(1360, 600)
+size = Vector2(1000, 120)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="WallLeft" parent="Past/Platforms" unique_id=2032774058 instance=ExtResource("2")]
+position = Vector2(-38, 0)
+size = Vector2(40, 720)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="WallRight" parent="Past/Platforms" unique_id=1769904418 instance=ExtResource("2")]
+position = Vector2(2360, 0)
+size = Vector2(40, 720)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="Step1" parent="Past/Platforms" unique_id=1099215540 instance=ExtResource("2")]
+position = Vector2(400, 510)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="Step2" parent="Past/Platforms" unique_id=949318813 instance=ExtResource("2")]
+position = Vector2(700, 420)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
+
+[node name="Step3" parent="Past/Platforms" unique_id=1157336795 instance=ExtResource("2")]
+position = Vector2(1000, 330)
+color = Color(0.53167063, 0.8168843, 0.44396064, 1)
 
 [node name="Player" parent="." unique_id=1439967328 instance=ExtResource("1")]
 position = Vector2(100, 600)
