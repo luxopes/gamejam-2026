@@ -76,7 +76,7 @@ git config pull.rebase true
 | Slash sound — `assets/sfx/sword.wav` | [10SWORD05.aif](https://freesound.org/people/lostchocolatelab/sounds/1468/) by lostchocolatelab (Freesound); lossless AIFF-to-WAV conversion | CC0 1.0 |
 | Jump sound — `assets/sfx/jump.wav` | [JH FX Short Whoosh 1](https://freesound.org/people/Johnnie_Holiday/sounds/696649/) by Johnnie_Holiday (Freesound); shortened and converted from MP4 to WAV | CC0 1.0 |
 | Time travel sound — `assets/sfx/portal.wav` | [Portal Phase Jump.wav](https://freesound.org/people/Vic5555/sounds/494484/) by Vic5555 (Freesound); original file | CC0 1.0 |
-| Slash, hit, hurt, dash dust, jump/landing dust, treasure glint and bloom effects — `assets/vfx/` | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) by nerijs / Pixel VFX Studio, Strict style | CC0 1.0 |
+| Slash, hit, hurt, dash dust, jump/landing dust, treasure glint, bloom and holy heal effects — `assets/vfx/` | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) by nerijs / Pixel VFX Studio, Strict style | CC0 1.0 |
 | Portal — `assets/vfx/portal.png` | [Portals 32 x 48](https://opengameart.org/content/portals-32-x-48) by RodHakGames; original file | CC0 1.0 |
 | Collectible coin — `assets/items/coin.png` | [Simple rotating coin](https://opengameart.org/content/simple-rotating-coin) by sacio; original file | CC0 1.0 |
 | Pickup effect — `assets/vfx/item_feedback.png` | [Sunny Land](https://opengameart.org/content/sunny-land-2d-pixel-art-pack) by Luis Zuno (ansimuz); four frames combined into a sheet | CC0 1.0 |

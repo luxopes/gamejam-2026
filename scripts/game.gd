@@ -18,7 +18,6 @@ var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
 var _new_game := false       # po výhře: R spustí hru znovu od začátku
 var restart_locked := false  # během závěrečných titulků R nefunguje
 var respawn_health := 0      # životy po návratu na checkpoint; 0 = plné
-var heal_coins := 0          # mince ušetřené na uzdravení (za každé 3 život)
 var flags := {}
 
 func set_flag(flag: String) -> void:
@@ -39,6 +38,12 @@ var _checkpoint_time := "present"
 func add_coin(coin: Node) -> void:
 	coins += 1
 	_collected_coins[_coin_id(coin)] = true
+	coins_changed.emit(coins)
+
+
+## Utratí mince (třeba za uzdravení).
+func spend_coins(amount: int) -> void:
+	coins -= amount
 	coins_changed.emit(coins)
 
 
@@ -88,7 +93,6 @@ func new_game() -> void:
 	_new_game = false
 	restart_locked = false
 	respawn_health = 0
-	heal_coins = 0
 	time = "present"
 
 
@@ -98,7 +102,6 @@ func finish_level(next_scene: String) -> void:
 	_checkpoint_level = ""
 	_collected_coins.clear()
 	respawn_health = 0
-	heal_coins = 0
 	if next_scene == "":
 		_new_game = true
 		level_finished.emit()

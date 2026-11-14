@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/vfx.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/vfx/holy_heal.png" id="2"]
+
+[node name="HolyHeal" type="Sprite2D"]
+texture_filter = 1
+texture = ExtResource("2")
+centered = false
+offset = Vector2(-32, -86)
+hframes = 8
+vframes = 3
+script = ExtResource("1")
+frame_count = 21
+fps = 12.5

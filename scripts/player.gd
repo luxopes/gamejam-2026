@@ -56,7 +56,7 @@ const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
 const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
 const DUST_PUFF := preload("res://scenes/vfx/dust_puff.tscn")
-const BLOOM_HEAL := preload("res://scenes/vfx/bloom_heal.tscn")
+const HOLY_HEAL := preload("res://scenes/vfx/holy_heal.tscn")
 const JUMP_SOUND := preload("res://assets/sfx/jump.wav")
 const SWORD_SOUND := preload("res://assets/sfx/sword.wav")
 
@@ -390,20 +390,20 @@ func heal(amount: int) -> void:
 	health_changed.emit(health, max_health)
 
 
-## Sebraná mince se ušetří na uzdravení.
+## Po sebrání mince zkusí uzdravit.
 func coin_collected() -> void:
-	Game.heal_coins += 1
 	_coin_heal()
 
 
-## Za každých pár ušetřených mincí přidá život, jakmile nějaký chybí
+## Za každých pár mincí přidá život, jakmile nějaký chybí
 ## (hned při sebrání, po zranění nebo po návratu na checkpoint).
 func _coin_heal() -> void:
-	if _dead or health >= max_health or Game.heal_coins < coins_per_heal:
+	if _dead or health >= max_health or Game.coins < coins_per_heal:
 		return
-	Game.heal_coins -= coins_per_heal
+	# Mince se utratí (zmizí z počítadla) až ve chvíli, kdy chybí život
+	Game.spend_coins(coins_per_heal)
 	heal(1)
-	Vfx.spawn(BLOOM_HEAL, get_parent(), global_position)
+	Vfx.spawn(HOLY_HEAL, self, global_position)   # efekt letí s hráčem
 
 
 ## Animace postavy podle stavu (SpriteFrames v uzlu Sprite):
