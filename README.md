@@ -38,6 +38,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/time_flash.tscn` | bílý záblesk obrazovky při přechodu časem (autoload `TimeFlash`) |
 | `scenes/music.tscn` | hudba přítomnosti a minulosti, při změně času se prolnou (autoload `Music`) |
 | `assets/music/` | hudba (viz Zdroje assetů) |
+| `assets/sfx/` + `scripts/sfx.gd` | zvukové efekty (skok, sek, mince, přechod časem); `Sfx.play(zvuk)` je přehraje |
 | `scenes/vfx/` + `scripts/vfx.gd` | efekty: sek, zásah, zranění, dash, prach ze skoku a dopadu |
 | `assets/vfx/` | obrázky efektů (viz Zdroje assetů) |
 | `assets/characters/poutnik/` | sprite hráče (poutník): sheety a `poutnik_frames.tres` s animacemi |
@@ -79,6 +80,10 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `assets/characters/mushroom/*.png` (nepřítel) | [Forest Monsters 2D Pixel Art](https://monopixelart.itch.io/forest-monsters-pixel-art) od MonoPixelArt, bezplatná verze: Mushroom (`Idle`, `Run`, `Die` bez VFX, `Hit` s VFX), soubory beze změny | použití v jakémkoli projektu i komerčně; balíček se nesmí přeprodávat ani šířit dál jako assety |
 | `assets/music/present.wav` (hudba přítomnosti) | David (tým) | tým |
 | `assets/music/past.mp3` (hudba minulosti) | David (tým), se zvukem [Ambience, Forest, Bird Sing, Black Forest Czech Republic](https://www.epidemicsound.com/sound-effects/tracks/01136a7f-b7ce-4e05-be80-be15e7fac08d/) z Epidemic Sound | tým; zvuk z Epidemic Sound podle předplatného |
+| `assets/sfx/coin.wav` (sebrání mince) | [coin 1.wav](https://freesound.org/people/robbeman/sounds/495643/) od robbeman (Freesound), soubor beze změny | CC0 1.0 |
+| `assets/sfx/sword.wav` (sek) | [10SWORD05.aif](https://freesound.org/people/lostchocolatelab/sounds/1468/) od lostchocolatelab (Freesound), převedeno z AIFF do WAV bez ztráty | CC0 1.0 |
+| `assets/sfx/jump.wav` (skok) | [JH FX Short Whoosh 1](https://freesound.org/people/Johnnie_Holiday/sounds/696649/) od Johnnie_Holiday (Freesound), zkrácená verze, převedeno z MP4 do WAV | CC0 1.0 |
+| `assets/sfx/portal.wav` (přechod časem) | [Portal Phase Jump.wav](https://freesound.org/people/Vic5555/sounds/494484/) od Vic5555 (Freesound), soubor beze změny | CC0 1.0 |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff`, `treasure-glint` → `treasure_glint` (třpyt u hádankových věcí), `bloom-heal` → `bloom_heal` (rozkvět výhonku) | CC0 1.0 |
 | `assets/vfx/portal.png` (portál) | [Portals 32 x 48](https://opengameart.org/content/portals-32-x-48) od RodHakGames, soubor beze změny; používá se modrý (do přítomnosti) a oranžový řádek (do minulosti) | CC0 1.0, autor prosí o uvedení: „Portals made by RodHakGames - RHG“ |
 | `assets/items/coin.png` (zlatá mince) | [Simple rotating coin](https://opengameart.org/content/simple-rotating-coin) od sacio, soubor beze změny | CC0 1.0 |
