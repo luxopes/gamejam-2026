@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://0t06iekngmp2" path="res://scenes/hazard.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/goal.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="7"]
 
 [node name="Level1" type="Node2D" unique_id=635269604]
 
@@ -54,6 +55,11 @@ position = Vector2(1280, 460)
 
 [node name="Hazard1" parent="Hazards" unique_id=1916625067 instance=ExtResource("4")]
 position = Vector2(1700, 600)
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Enemy1" parent="Enemies" instance=ExtResource("7")]
+position = Vector2(300, 600)
 
 [node name="Goal" parent="." unique_id=1783578996 instance=ExtResource("5")]
 position = Vector2(2250, 600)
