@@ -106,4 +106,8 @@ func finish_level(next_scene: String) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("restart") and not restart_locked:
+		# R jako pád do jámy: hráč se vrátí se stejnými životy
+		var player := get_tree().get_first_node_in_group("player")
+		if player:
+			respawn_health = player.health
 		restart_level()
