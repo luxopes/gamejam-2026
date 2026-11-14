@@ -6,6 +6,13 @@ extends Area2D
 
 const WARM := Color(1.0, 0.72, 0.35)
 const COLD := Color(0.45, 0.7, 1.0)
+## Po přepnutí času portály pár fyzikálních snímků hráče ignorují. Jinak když hráč
+## přistane v portálu druhého světa (stojí v obou najednou), čas by se přepínal pořád
+## dokola a hra by spadla na pár FPS. Portál druhého světa se ozve hned o snímek později;
+## projít zpátky jde až po vyjití z portálu a novém vstupu.
+const REENTRY_DELAY_FRAMES := 5
+
+static var _last_switch_frame := -REENTRY_DELAY_FRAMES
 
 
 func _ready() -> void:
@@ -17,5 +24,10 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		Game.set_time(target_time)
+	if not body.is_in_group("player"):
+		return
+	var frame := Engine.get_physics_frames()
+	if frame - _last_switch_frame < REENTRY_DELAY_FRAMES:
+		return
+	_last_switch_frame = frame
+	Game.set_time(target_time)
