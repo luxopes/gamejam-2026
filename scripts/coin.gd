@@ -1,5 +1,5 @@
 extends Area2D
-## Mince (drahokam ze Sunny Land). Po sebrání hráčem zmizí, přičte bod a blikne efektem.
+## Zlatá mince (Simple rotating coin od sacio). Po sebrání hráčem zmizí, přičte bod a blikne efektem.
 ## Sebraná zůstane pryč i po smrti.
 
 const FEEDBACK := preload("res://scenes/vfx/item_feedback.tscn")

@@ -1,0 +1,95 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/coin.png" id="sheet"]
+
+[sub_resource type="AtlasTexture" id="coin_0"]
+atlas = ExtResource("sheet")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_1"]
+atlas = ExtResource("sheet")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_2"]
+atlas = ExtResource("sheet")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_3"]
+atlas = ExtResource("sheet")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_4"]
+atlas = ExtResource("sheet")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_5"]
+atlas = ExtResource("sheet")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_6"]
+atlas = ExtResource("sheet")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_7"]
+atlas = ExtResource("sheet")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_8"]
+atlas = ExtResource("sheet")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_9"]
+atlas = ExtResource("sheet")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_10"]
+atlas = ExtResource("sheet")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="coin_11"]
+atlas = ExtResource("sheet")
+region = Rect2(176, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("coin_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_10")
+}, {
+"duration": 1.0,
+"texture": SubResource("coin_11")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
