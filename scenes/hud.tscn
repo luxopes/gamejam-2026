@@ -1,25 +1,10 @@
 [gd_scene format=3 uid="uid://b12yy4u17mnhi"]
 
 [ext_resource type="Script" uid="uid://r2wxgyxtehmu" path="res://scripts/hud.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cukgw3hhynnlk" path="res://assets/ui/coins.png" id="2_oo0fn"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1000602809]
 script = ExtResource("1")
-
-[node name="Coins" type="Label" parent="." unique_id=432355491]
-offset_left = 20.0
-offset_top = 16.0
-offset_right = 300.0
-offset_bottom = 56.0
-theme_override_font_sizes/font_size = 28
-text = "Mince: 0"
-
-[node name="Health" type="Label" parent="." unique_id=1955516332]
-offset_left = 20.0
-offset_top = 56.0
-offset_right = 300.0
-offset_bottom = 96.0
-theme_override_font_sizes/font_size = 28
-text = "Mince: 0"
 
 [node name="Message" type="Label" parent="." unique_id=284036901]
 anchors_preset = 15
@@ -27,8 +12,39 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 56
 text = "Les se odrazil zpátky.
 R = hrát znovu"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bar" type="VBoxContainer" parent="." unique_id=1751286105]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 52.0
+theme_override_constants/separation = 6
+
+[node name="Hearts" type="HBoxContainer" parent="Bar" unique_id=1367538107]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CoinRow" type="HBoxContainer" parent="Bar" unique_id=1958493854]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Icon" type="TextureRect" parent="Bar/CoinRow" unique_id=809681052]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_oo0fn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Count" type="Label" parent="Bar/CoinRow" unique_id=215333068]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "0"
 vertical_alignment = 1

@@ -84,6 +84,9 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `assets/items/gem.png` (mince), `assets/vfx/item_feedback.png` (efekt sebrání) | [Sunny Land](https://opengameart.org/content/sunny-land-2d-pixel-art-pack) od Luis Zuno (ansimuz); `gem` beze změny, `item-feedback-1` až `4` spojené do jednoho pásu | CC0 1.0 |
 | `assets/items/crystal.png` (odrazový krystal) | [Ancient Crystal 2D Pixel Art](https://opengameart.org/content/ancient-crystal-2d-pixel-art) od One To Zero, soubor beze změny | CC0 1.0 |
 | `assets/levels/sunnyland/*` (dlaždice, pozadí, strom, chaloupka, rostliny) | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) od Luis Zuno (ansimuz), licence v `assets/levels/sunnyland/LICENSE.txt` | CC0 1.0 |
+| `assets/ui/hearts.png`, `hearts_gray.png` (srdíčka v horní liště) | [Healthbar sprite](https://opengameart.org/node/182567) od ArtBIT, soubory beze změny | CC0 1.0 |
+| `assets/ui/coin.png`, `coins.png` (ikona mincí v horní liště) | [Gold treasure icons 16x16](https://opengameart.org/content/gold-treasure-icons-16x16) od Bonsaiheldin (http://bonsaiheld.org), soubory beze změny | CC0 1.0 |
+| `assets/fonts/PixelifySans.ttf` (písmo celé hry) | [Pixelify Sans](https://github.com/google/fonts/tree/main/ofl/pixelifysans) od Stefie Justprince, licence v `assets/fonts/PixelifySans-OFL.txt` | SIL OFL 1.1 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
 

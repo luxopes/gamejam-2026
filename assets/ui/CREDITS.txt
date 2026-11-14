@@ -1,0 +1,7 @@
+hearts.png, hearts_gray.png (3 srdíčka vedle sebe po 17x15 px: plné, poloviční, prázdné)
+  "Healthbar sprite" od ArtBIT, https://opengameart.org/node/182567, licence CC0
+  (původní soubory heart_27.png a heart-gray_0.png, beze změny)
+
+coin.png, coins.png (16x16)
+  "Gold treasure icons 16x16" od Bonsaiheldin, https://opengameart.org/content/gold-treasure-icons-16x16, licence CC0
+  (původní soubory 2.png a 3.png, beze změny; autor uvítá uvedení "Bonsaiheldin | http://bonsaiheld.org")
