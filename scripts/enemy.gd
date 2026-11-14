@@ -75,6 +75,12 @@ func hit(direction: Vector2) -> void:
 	_sprite.frame = 0
 
 
+## Okamžitá smrt, třeba po pádu do ostnů.
+func kill() -> void:
+	if not _dead:
+		_destroy()
+
+
 func _destroy() -> void:
 	_dead = true
 	collision_layer = 0           # sek ho už nenajde a hráče už nezraní
