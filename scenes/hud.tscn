@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://r2wxgyxtehmu" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cukgw3hhynnlk" path="res://assets/ui/coins.png" id="2_oo0fn"]
 [ext_resource type="PackedScene" path="res://scenes/credits.tscn" id="3_credits"]
+[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="4_pause"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1000602809]
 script = ExtResource("1")
@@ -38,3 +39,5 @@ text = "0"
 vertical_alignment = 1
 
 [node name="Credits" parent="." instance=ExtResource("3_credits")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_pause")]
