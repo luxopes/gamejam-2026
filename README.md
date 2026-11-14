@@ -29,7 +29,8 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/player.tscn` + `scripts/player.gd` | hráč (pohyb, skok, kamera) |
 | `scenes/platform.tscn` | plošina, velikost a barva se nastavují v Inspektoru |
 | `scenes/coin.tscn` | mince |
-| `scenes/hazard.tscn` | bodáky, dotyk = restart úrovně |
+| `scenes/hazard.tscn` | bodáky, dotyk ubere život |
+| `scenes/checkpoint.tscn` | checkpoint: po smrti tu hráč začne, doplní životy |
 | `scenes/enemy.tscn` | nepřítel: chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
 | `scenes/goal.tscn` | cíl úrovně |
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
@@ -47,8 +48,11 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
   Když `Next Scene` zůstane prázdné, cíl ukáže „Vyhráno!“.
 - **Vlastní grafika:** v dané scéně smaž `ColorRect` (nebo `Polygon2D`) a přidej
   místo něj `Sprite2D` nebo `AnimatedSprite2D`. Kolize zůstávají.
-- **Nový nepřítel nebo past:** zkopíruj `hazard.tscn`; kdo zavolá `body.die()`,
-  zabije hráče.
+- **Nový nepřítel nebo past:** zkopíruj `hazard.tscn`. Cokoli ve skupině
+  `hurts_player` hráči při dotyku ubere život. Okamžitě zabije `body.die()`.
+- **Životy:** hráč má 5 životů, po zásahu chvíli bliká a je nezranitelný.
+  Po smrti začíná na posledním checkpointu. Čísla jsou u `Player` ve skupině
+  **Životy**, pro HUD je připravený signál `health_changed`.
 - **Útok na nepřítele:** když má objekt funkci `hit(direction)`, sek ji zavolá.
   Když je ve skupině `pogo`, hráč se od něj sekem dolů odrazí (vzor: `enemy.tscn`).
 
