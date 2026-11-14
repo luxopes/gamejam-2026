@@ -1,6 +1,6 @@
 extends CharacterBody2D
 ## Nepřítel, který chodí tam a zpět. Po zásahu odletí, náraz do zdi ho zničí.
-## Dotyk zabije hráče. Je ve skupině "pogo", takže se od něj dá odrazit.
+## Je ve skupině "hurts_player" (dotyk hráče zraní) a "pogo" (dá se od něj odrazit).
 
 @export var walk_speed := 80.0          ## rychlost chůze (px/s)
 @export var gravity := 1300.0
@@ -20,7 +20,7 @@ var _dead := false
 
 
 func _ready() -> void:
-	# Hráč nepřítelem prochází, zabíjí ho jen Hurtbox
+	# Hráč nepřítelem prochází, zraní ho jen dotyk (Hurtbox hráče)
 	for player in get_tree().get_nodes_in_group("player"):
 		add_collision_exception_with(player)
 	_ledge_check.position.x = _direction * absf(_ledge_check.position.x)
@@ -71,8 +71,7 @@ func hit(direction: Vector2) -> void:
 
 func _destroy() -> void:
 	_dead = true
-	collision_layer = 0           # sek ho už nenajde
-	$Hurtbox.set_deferred("monitoring", false)
+	collision_layer = 0           # sek ho už nenajde a hráče už nezraní
 
 	var tween := create_tween()
 	tween.set_parallel()
@@ -80,8 +79,3 @@ func _destroy() -> void:
 	tween.tween_property(self, "scale", Vector2(1.6, 0.2), 0.25)  # rozplácne se
 	await tween.finished
 	queue_free()
-
-
-func _on_hurtbox_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		body.die()
