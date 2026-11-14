@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/title.gd" id="1"]
 [ext_resource type="VideoStream" path="res://assets/video/title_bg.ogv" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="ControlsPanel"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.83, 0.3, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 24.0
+content_margin_top = 16.0
+content_margin_right = 24.0
+content_margin_bottom = 16.0
 
 [node name="Title" type="Control"]
 layout_mode = 3
@@ -43,7 +59,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
-theme_override_constants/separation = 40
+theme_override_constants/separation = 32
 
 [node name="Name" type="Label" parent="Box"]
 layout_mode = 2
@@ -60,12 +76,19 @@ theme_override_font_sizes/font_size = 36
 text = "Press ENTER to start"
 horizontal_alignment = 1
 
-[node name="Controls" type="Label" parent="Box"]
+[node name="Controls" type="PanelContainer" parent="Box"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("ControlsPanel")
+
+[node name="Text" type="RichTextLabel" parent="Box/Controls"]
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-modulate = Color(1, 1, 1, 0.7)
-theme_override_font_sizes/font_size = 22
-text = "Move A / D   Jump SPACE   Attack ARROWS   Dash SHIFT
-Look W / S   Restart R   Pause ESC"
-horizontal_alignment = 1
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center][color=#ffd34d]CONTROLS[/color][/center]
+[center][table=4][cell padding=24,6,8,6][right][color=#ffd34d]A / D[/color][/right][/cell][cell padding=8,6,24,6]Move[/cell][cell padding=24,6,8,6][right][color=#ffd34d]SPACE[/color][/right][/cell][cell padding=8,6,24,6]Jump[/cell][cell padding=24,6,8,6][right][color=#ffd34d]ARROWS[/color][/right][/cell][cell padding=8,6,24,6]Attack[/cell][cell padding=24,6,8,6][right][color=#ffd34d]SHIFT[/color][/right][/cell][cell padding=8,6,24,6]Dash[/cell][cell padding=24,6,8,6][right][color=#ffd34d]W / S[/color][/right][/cell][cell padding=8,6,24,6]Look[/cell][cell padding=24,6,8,6][right][color=#ffd34d]R[/color][/right][/cell][cell padding=8,6,24,6]Restart[/cell][cell padding=24,6,8,6][right][color=#ffd34d]ESC[/color][/right][/cell][cell padding=8,6,24,6]Pause[/cell][/table][/center]"
+fit_content = true
+scroll_active = false
