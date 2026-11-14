@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://8ulvq37sv81"]
+
+[ext_resource type="Script" uid="uid://dcccdquejbg5u" path="res://scripts/time_trigger.gd" id="1_np8tt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
+size = Vector2(40, 40)
+
+[node name="TimeTrigger" type="Area2D" unique_id=1688943687]
+script = ExtResource("1_np8tt")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1743853881]
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+color = Color(0.5488623, 0.40428853, 3.85046e-07, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=407299032]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_trigger")
