@@ -55,6 +55,8 @@ const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
 const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
 const DUST_PUFF := preload("res://scenes/vfx/dust_puff.tscn")
+const JUMP_SOUND := preload("res://assets/sfx/jump.wav")
+const SWORD_SOUND := preload("res://assets/sfx/sword.wav")
 
 var _coyote := 0.0
 var _buffer := 0.0
@@ -126,6 +128,7 @@ func _physics_process(delta: float) -> void:
 		_coyote = 0.0
 		_jumping = true
 		Vfx.spawn(DUST_PUFF, get_parent(), global_position)
+		Sfx.play(JUMP_SOUND, -8.0)
 		_squash(jump_stretch)
 	# Krátký stisk = nižší skok (pogo se tím nezkracuje)
 	if Input.is_action_just_released("jump") and _jumping and velocity.y < 0.0:
@@ -185,6 +188,7 @@ func _start_attack(direction: Vector2) -> void:
 	_recoiled = false
 	_hit_wall = false
 	_slash.play()
+	Sfx.play(SWORD_SOUND, -8.0)
 
 
 func _check_hits() -> void:
