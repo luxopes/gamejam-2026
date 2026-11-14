@@ -35,6 +35,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/enemy.tscn` | nepřítel: chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
 | `scenes/goal.tscn` | cíl úrovně |
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
+| `scenes/time_flash.tscn` | bílý záblesk obrazovky při přechodu časem (autoload `TimeFlash`) |
 | `scenes/vfx/` + `scripts/vfx.gd` | efekty: sek, zásah, zranění, dash, prach ze skoku a dopadu |
 | `assets/vfx/` | obrázky efektů (viz Zdroje assetů) |
 | `assets/characters/poutnik/` | sprite hráče (poutník): sheety a `poutnik_frames.tres` s animacemi |
