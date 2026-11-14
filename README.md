@@ -12,11 +12,11 @@ všechno jsou barevné obdélníky, takže se dá cokoli hned vyměnit za vlastn
 
 | Akce | Klávesy | Gamepad |
 |---|---|---|
-| Pohyb | A / D nebo šipky | páčka, kříž |
-| Skok | Mezerník | A |
-| Útok (sek) | levé tlačítko myši nebo J | X |
+| Pohyb | A / D | páčka, kříž |
+| Skok | W nebo mezerník | A |
+| Útok (sek) | šipka rovnou sekne ve svém směru | X |
 | Dash | Shift | RB |
-| Míření nahoru / dolů | W / S nebo šipky | páčka, kříž |
+| Míření nahoru / dolů | směr určuje stisknutá šipka | páčka, kříž |
 | Restart | R | Back |
 
 Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
