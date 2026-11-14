@@ -13,6 +13,7 @@ func set_time(new_time: String) -> void:
 	time_changed.emit(time)
 	
 var coins := 0
+var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
 var flags := {}
 
 func set_flag(flag: String) -> void:
@@ -30,9 +31,23 @@ var _checkpoint_position := Vector2.ZERO
 var _checkpoint_time := "present"
 
 
-func add_coin() -> void:
+func add_coin(coin: Node = null) -> void:
 	coins += 1
+	if coin:
+		_collected_coins[_coin_id(coin)] = true
 	coins_changed.emit(coins)
+
+
+## Mince sebraná před smrtí se po novém načtení úrovně už neobjeví.
+func is_coin_collected(coin: Node) -> bool:
+	return _collected_coins.has(_coin_id(coin))
+
+
+# Úroveň + cesta k minci ve scéně; po novém načtení úrovně zůstává stejná
+func _coin_id(coin: Node) -> String:
+	if coin.owner == null:
+		return str(coin.get_path())
+	return coin.owner.scene_file_path + ":" + str(coin.owner.get_path_to(coin))
 
 
 ## Zavolá checkpoint, když se ho hráč dotkne.
@@ -54,7 +69,7 @@ func restart_level() -> void:
 	# Vrátí i čas, ve kterém byl checkpoint, ať hráč nestojí ve vzduchu
 	if get_checkpoint(get_tree().current_scene) != null:
 		time = _checkpoint_time
-	coins = 0
+	# Sebrané mince (počet i samotné mince) zůstávají i po smrti
 	get_tree().reload_current_scene.call_deferred()
 
 
@@ -62,6 +77,7 @@ func restart_level() -> void:
 func finish_level(next_scene: String) -> void:
 	flags.clear()
 	_checkpoint_level = ""
+	_collected_coins.clear()
 	if next_scene == "":
 		level_finished.emit()
 	else:
