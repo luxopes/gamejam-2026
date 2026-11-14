@@ -6,13 +6,11 @@ extends Area2D
 
 @export var flag := ""
 
-var _used := false
-var _pulse: Tween
-
 const BLOOM := preload("res://scenes/vfx/bloom_heal.tscn")
 
+var _pulse: Tween
+
 @onready var _rock: Sprite2D = $Rock
-@onready var _sprout: Sprite2D = $Sprout
 
 
 func _ready() -> void:
@@ -20,28 +18,24 @@ func _ready() -> void:
 	if Game.has_flag(flag):
 		queue_free()
 		return
-	var is_rock := flag == "balvan"
-	_rock.visible = is_rock
-	_sprout.visible = not is_rock
-	var look: Sprite2D = _rock if is_rock else _sprout
+	_rock.visible = flag == "balvan"
+	$Sprout.visible = not _rock.visible
+	var look: Sprite2D = _rock if _rock.visible else $Sprout
 	_pulse = create_tween().set_loops()
 	_pulse.tween_property(look, "self_modulate", Color(1.6, 1.6, 1.3), 0.6).set_trans(Tween.TRANS_SINE)
 	_pulse.tween_property(look, "self_modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_SINE)
 
 
 func hit(direction: Vector2) -> void:
-	if _used:
+	if Game.has_flag(flag):
 		return
-	_used = true
 	_pulse.kill()
 	$Glint.queue_free()
 	Game.set_flag(flag)
 	$CollisionShape2D.set_deferred("disabled", true)
 	if not _rock.visible:
 		# Výhonek vykvete, strom v přítomnosti vyroste
-		var bloom := BLOOM.instantiate()
-		get_parent().add_child(bloom)
-		bloom.global_position = global_position
+		Vfx.spawn(BLOOM, get_parent(), global_position)
 		queue_free()
 		return
 	# Balvan blikne a skutálí se ve směru seku dolů z římsy

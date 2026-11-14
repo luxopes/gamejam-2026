@@ -2,12 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ctonrdimsswlq" path="res://scripts/time_blocker.gd" id="1_w0l84"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3cbsh"]
-size = Vector2(40, 200)
-
 [node name="TimeBlocker" type="StaticBody2D" unique_id=812879310]
 script = ExtResource("1_w0l84")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1770259473]
-position = Vector2(0, -100)
-shape = SubResource("RectangleShape2D_3cbsh")

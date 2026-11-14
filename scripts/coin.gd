@@ -13,7 +13,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		Game.add_coin(self)
-		var fx := FEEDBACK.instantiate()
-		get_parent().add_child(fx)
-		fx.global_position = global_position
+		Vfx.spawn(FEEDBACK, get_parent(), global_position)
 		queue_free()

@@ -6,10 +6,9 @@ extends Area2D
 
 const WARM := Color(1.0, 0.72, 0.35)
 const COLD := Color(0.45, 0.7, 1.0)
-## Po přepnutí času portály pár fyzikálních snímků hráče ignorují. Jinak když hráč
-## přistane v portálu druhého světa (stojí v obou najednou), čas by se přepínal pořád
-## dokola a hra by spadla na pár FPS. Portál druhého světa se ozve hned o snímek později;
-## projít zpátky jde až po vyjití z portálu a novém vstupu.
+## Po přepnutí času portály pár fyzikálních snímků hráče ignorují. Jinak by se čas
+## u hráče stojícího v portálech obou světů přepínal pořád dokola (pád na pár FPS).
+## Projít zpátky jde až po vyjití z portálu a novém vstupu.
 const REENTRY_DELAY_FRAMES := 5
 
 static var _last_switch_frame := -REENTRY_DELAY_FRAMES

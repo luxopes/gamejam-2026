@@ -11,7 +11,7 @@ const HEART_SCALE := 3.0              ## zvětšení pixelů srdíčka
 
 func _ready() -> void:
 	Game.coins_changed.connect(_on_coins_changed)
-	Game.level_finished.connect(_on_level_finished)
+	Game.level_finished.connect($Message.show)
 	_on_coins_changed(Game.coins)
 	$Message.hide()
 	var player = get_tree().get_first_node_in_group("player")
@@ -22,10 +22,6 @@ func _ready() -> void:
 
 func _on_coins_changed(count: int) -> void:
 	_coin_count.text = str(count)
-
-
-func _on_level_finished() -> void:
-	$Message.show()
 
 
 func _on_health_changed(health: int, max_health: int) -> void:

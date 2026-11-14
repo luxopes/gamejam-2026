@@ -11,7 +11,8 @@ var time := "present"
 func set_time(new_time: String) -> void:
 	time = new_time
 	time_changed.emit(time)
-	
+
+
 var coins := 0
 var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
 var _new_game := false       # po výhře: R spustí hru znovu od začátku
@@ -32,10 +33,9 @@ var _checkpoint_position := Vector2.ZERO
 var _checkpoint_time := "present"
 
 
-func add_coin(coin: Node = null) -> void:
+func add_coin(coin: Node) -> void:
 	coins += 1
-	if coin:
-		_collected_coins[_coin_id(coin)] = true
+	_collected_coins[_coin_id(coin)] = true
 	coins_changed.emit(coins)
 
 

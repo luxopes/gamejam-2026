@@ -12,6 +12,7 @@ const TRUNK_WIDTH := 40.0
 const ROCKS_WIDTH := 64.0
 const TILES := preload("res://assets/levels/forest_tiles.tres")
 const ROCK := preload("res://assets/levels/sunnyland/rock.png")
+const ROCK_FILL := [138, 198, 137, 138]   # dlaždice uvnitř závalu
 
 
 func _ready() -> void:
@@ -33,51 +34,30 @@ func _update() -> void:
 
 ## Kolize podle výšky a vzhled poskládaný z hotových assetů Sunnylandu
 func _build() -> void:
+	var trunk := look == "trunk"
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(TRUNK_WIDTH if look == "trunk" else ROCKS_WIDTH, height)
+	shape.size = Vector2(TRUNK_WIDTH if trunk else ROCKS_WIDTH, height)
 	$CollisionShape2D.shape = shape
 	$CollisionShape2D.position = Vector2(0, -height / 2.0)
-	if look == "trunk":
-		_build_trunk()
-	else:
-		_build_rocks()
 
-
-func _build_trunk() -> void:
-	# Kmen z dlaždic obřího stromu, 3 dlaždice široký, nahoře travnatý pařez
+	# Kmen: 3 dlaždice obřího stromu, nahoře travnatý pařez.
+	# Zával: 4 dlaždice, kamenná zátka ze skalních dlaždic s balvany uvnitř.
+	var cols := 3 if trunk else 4
 	var layer := TileMapLayer.new()
 	layer.tile_set = TILES
 	layer.collision_enabled = false
 	layer.use_parent_material = true
-	layer.position = Vector2(-24, -height)
-	var rows := ceili(height / 16.0)
-	for y in rows:
-		var ids := [67, 68, 70] if y == 0 else [207, 208 + (y % 2), 210]
-		for x in 3:
+	layer.position = Vector2(-cols * 8, -height)
+	for y in ceili(height / 16.0):
+		var ids := [127, ROCK_FILL[(3 + y * 5) % 4], ROCK_FILL[(6 + y * 5) % 4], 130]
+		if trunk:
+			ids = [67, 68, 70] if y == 0 else [207, 208 + (y % 2), 210]
+		for x in cols:
 			layer.set_cell(Vector2i(x, y), 0, Vector2i(ids[x] % 20, ids[x] / 20))
 	add_child(layer)
-
-
-func _build_rocks() -> void:
-	# Zával: kamenná zátka ze skalních dlaždic s balvany uvnitř, u paty suť z kamenů
-	var layer := TileMapLayer.new()
-	layer.tile_set = TILES
-	layer.collision_enabled = false
-	layer.use_parent_material = true
-	var cols := int(ROCKS_WIDTH / 16.0)
-	layer.position = Vector2(-ROCKS_WIDTH / 2.0, -height)
-	var rows := ceili(height / 16.0)
-	for y in rows:
-		for x in cols:
-			var id: int
-			if x == 0:
-				id = 127
-			elif x == cols - 1:
-				id = 130
-			else:
-				id = [138, 198, 137, 138][(x * 3 + y * 5) % 4]
-			layer.set_cell(Vector2i(x, y), 0, Vector2i(id % 20, id / 20))
-	add_child(layer)
+	if trunk:
+		return
+	# U paty závalu suť z kamenů
 	for side in [-1, 1]:
 		var rock := Sprite2D.new()
 		rock.texture = ROCK

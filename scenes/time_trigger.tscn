@@ -21,7 +21,6 @@ position = Vector2(0, -16)
 texture = SubResource("AtlasTexture_rune")
 
 [node name="Sprout" type="Sprite2D" parent="." unique_id=1688943702]
-visible = false
 use_parent_material = true
 position = Vector2(0, -18)
 texture = ExtResource("3_plant")

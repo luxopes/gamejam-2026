@@ -49,6 +49,8 @@ signal health_changed(health: int, max_health: int)
 @export var squash_time := 0.15          ## jak rychle se postava vrátí do normálu (s)
 
 const WALL_REACH := 64.0   # kam až sek do strany dosáhne na zeď (konec oblasti seku)
+const ATTACKS := {"attack_up": Vector2.UP, "attack_down": Vector2.DOWN,
+		"attack_left": Vector2.LEFT, "attack_right": Vector2.RIGHT}
 const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
 const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
@@ -77,7 +79,6 @@ var _squash_tween: Tween
 
 @onready var health := max_health
 @onready var _hurtbox: Area2D = $Hurtbox
-
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: Vfx = $AttackArea/Slash
 @onready var _attack_shape: CollisionShape2D = $AttackArea/CollisionShape2D
@@ -88,8 +89,6 @@ var _squash_tween: Tween
 
 
 func _ready() -> void:
-	# Obdélník je jen náhradní grafika, dokud Sprite nemá animace
-	$ColorRect.visible = _sprite.sprite_frames == null
 	# Po smrti začíná hráč na posledním checkpointu
 	var spawn = Game.get_checkpoint(owner)
 	if spawn != null:
@@ -126,7 +125,7 @@ func _physics_process(delta: float) -> void:
 		_buffer = 0.0
 		_coyote = 0.0
 		_jumping = true
-		_spawn_vfx(DUST_PUFF, global_position)
+		Vfx.spawn(DUST_PUFF, get_parent(), global_position)
 		_squash(jump_stretch)
 	# Krátký stisk = nižší skok (pogo se tím nezkracuje)
 	if Input.is_action_just_released("jump") and _jumping and velocity.y < 0.0:
@@ -148,7 +147,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if is_on_floor() and not was_on_floor:
 		if fall_speed >= landing_dust_speed:
-			_spawn_vfx(DUST_PUFF, global_position)
+			Vfx.spawn(DUST_PUFF, get_parent(), global_position)
 		if fall_speed >= land_squash_speed:
 			_squash(land_squash)
 
@@ -160,18 +159,11 @@ func _physics_process(delta: float) -> void:
 func _update_attack(delta: float) -> void:
 	_cooldown_timer -= delta
 	if _cooldown_timer <= 0.0:
-		var attack_direction := Vector2.ZERO
 		# Šipka spustí sek přímo ve svém směru, nezávisle na pohybu.
-		if Input.is_action_just_pressed("attack_up"):
-			attack_direction = Vector2.UP
-		elif Input.is_action_just_pressed("attack_down"):
-			attack_direction = Vector2.DOWN
-		elif Input.is_action_just_pressed("attack_left"):
-			attack_direction = Vector2.LEFT
-		elif Input.is_action_just_pressed("attack_right"):
-			attack_direction = Vector2.RIGHT
-		if attack_direction != Vector2.ZERO:
-			_start_attack(attack_direction)
+		for action in ATTACKS:
+			if Input.is_action_just_pressed(action):
+				_start_attack(ATTACKS[action])
+				break
 
 	if _attack_timer > 0.0:
 		_attack_timer -= delta
@@ -196,15 +188,24 @@ func _start_attack(direction: Vector2) -> void:
 
 
 func _check_hits() -> void:
-	for target in _attack_targets():
-		if target == self or target in _already_hit:
+	# Ptá se fyziky přímo s aktuálním otočením a velikostí seku; dotyky oblasti
+	# (get_overlapping_*) by v prvním snímku platily ještě pro minulý sek.
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = _attack_shape.shape
+	query.transform = _attack_shape.global_transform
+	query.collision_mask = _attack_area.collision_mask
+	query.collide_with_areas = true
+	query.exclude = [get_rid()]
+	for found in get_world_2d().direct_space_state.intersect_shape(query, 32):
+		var target: Node = found.collider
+		if target in _already_hit:
 			continue
 		var hittable: bool = target.has_method("hit")
 		if not hittable and not target.is_in_group("pogo"):
 			continue
 		_already_hit.append(target)
-		_spawn_vfx(HIT_SPARK, _attack_area.global_position + _attack_dir * 40.0)
-		_shake()
+		Vfx.spawn(HIT_SPARK, get_parent(), _attack_area.global_position + _attack_dir * 40.0)
+		_shake_timer = shake_time
 		if hittable and target.is_in_group("hurts_player"):
 			_hit_stop()   # nepřítel (bodáky nemají hit(), krystal a páka nezraňují)
 		if hittable:
@@ -215,28 +216,12 @@ func _check_hits() -> void:
 	# hrudi, aby se nepočítala podlaha, o kterou spodek seku vždycky zavadí.
 	if _attack_dir.x != 0.0 and not _hit_wall:
 		var from := _attack_area.global_position
-		var query := PhysicsRayQueryParameters2D.create(from, from + _attack_dir * WALL_REACH, 1, [get_rid()])
-		var wall := get_world_2d().direct_space_state.intersect_ray(query)
+		var ray := PhysicsRayQueryParameters2D.create(from, from + _attack_dir * WALL_REACH, 1, [get_rid()])
+		var wall := get_world_2d().direct_space_state.intersect_ray(ray)
 		if wall and wall.collider is StaticBody2D:
 			_hit_wall = true
-			_spawn_vfx(HIT_SPARK, wall.position)
+			Vfx.spawn(HIT_SPARK, get_parent(), wall.position)
 			_apply_hit_reaction()
-
-
-## Co právě zasahuje sek. Ptá se fyziky přímo s aktuálním otočením a velikostí seku;
-## dotyky oblasti (get_overlapping_*) by v prvním snímku platily ještě pro minulý sek.
-func _attack_targets() -> Array:
-	var query := PhysicsShapeQueryParameters2D.new()
-	query.shape = _attack_shape.shape
-	query.transform = _attack_shape.global_transform
-	query.collision_mask = _attack_area.collision_mask
-	query.collide_with_areas = true
-	query.exclude = [get_rid()]
-	var found := []
-	for hit in get_world_2d().direct_space_state.intersect_shape(query, 32):
-		if not hit.collider in found:
-			found.append(hit.collider)
-	return found
 
 
 ## Odraz hráče po zásahu, jednou za sek.
@@ -270,7 +255,7 @@ func _update_dash(delta: float) -> bool:
 		if direction != 0.0:
 			_facing = signf(direction)
 		if is_on_floor():
-			_spawn_vfx(DASH_DUST, global_position, -_facing)   # prach zůstává za hráčem
+			Vfx.spawn(DASH_DUST, get_parent(), global_position, -_facing)   # prach zůstává za hráčem
 		else:
 			_can_air_dash = false
 		_dash_timer = dash_time
@@ -324,13 +309,8 @@ func _update_look(delta: float) -> void:
 	_camera.offset = Vector2(0.0, _look_offset) + shake
 
 
-func _shake() -> void:
-	_shake_timer = shake_time
-
-
-## Krátké zamrznutí hry při zásahu nepřítele. Čas vrací Engine sám přes časovač,
-## který zpomalení nepodléhá, takže se hra nezasekne, ani když hráč mezitím zmizí
-## (třeba při znovunačtení úrovně).
+## Krátké zamrznutí hry při zásahu nepřítele. Čas vrací časovač, který zpomalení
+## nepodléhá, takže se hra nezasekne, ani když hráč mezitím zmizí (nové načtení úrovně).
 func _hit_stop() -> void:
 	if hit_stop_time <= 0.0 or Engine.time_scale == 0.0:
 		return
@@ -374,7 +354,7 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 		return
 	health = maxi(health - amount, 0)
 	health_changed.emit(health, max_health)
-	_spawn_vfx(HURT_BURST, global_position + Vector2(0, -24))
+	Vfx.spawn(HURT_BURST, get_parent(), global_position + Vector2(0, -24))
 	if health == 0:
 		die()
 		return
@@ -417,29 +397,16 @@ func _update_animation() -> void:
 	_sprite.flip_h = (_facing > 0.0) == sprite_faces_left
 
 	var frames := _sprite.sprite_frames
-	if frames == null:
-		return
 	if _slash.visible and _dash_timer <= 0.0:
 		var attack := "attack"
-		if _attack_dir == Vector2.UP:
-			attack = "attack_up"
-		elif _attack_dir == Vector2.DOWN:
-			attack = "attack_down"
+		if _attack_dir.x == 0.0:
+			attack = ATTACKS.find_key(_attack_dir)
 		for name in [attack, "attack"]:
 			if frames.has_animation(name):
 				anim = name
 				break
 	if frames.has_animation(anim) and _sprite.animation != anim:
 		_sprite.play(anim)
-
-
-## Vytvoří jednorázový efekt v úrovni (zůstane na místě, i když se hráč pohne).
-## flip = -1 efekt zrcadlí.
-func _spawn_vfx(scene: PackedScene, at: Vector2, flip := 1.0) -> void:
-	var fx: Node2D = scene.instantiate()
-	fx.scale.x *= flip
-	get_parent().add_child(fx)
-	fx.global_position = at
 
 
 func die() -> void:

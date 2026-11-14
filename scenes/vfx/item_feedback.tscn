@@ -9,7 +9,6 @@ texture = ExtResource("2")
 centered = false
 offset = Vector2(-16, -16)
 hframes = 4
-vframes = 1
 script = ExtResource("1")
 frame_count = 4
 fps = 14.0
