@@ -1,0 +1,274 @@
+[gd_resource type="SpriteFrames" load_steps=40 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/mushroom/idle.png" id="idle"]
+[ext_resource type="Texture2D" path="res://assets/characters/mushroom/run.png" id="run"]
+[ext_resource type="Texture2D" path="res://assets/characters/mushroom/hit.png" id="hit"]
+[ext_resource type="Texture2D" path="res://assets/characters/mushroom/die.png" id="die"]
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("idle")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("idle")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("idle")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("idle")
+region = Rect2(240, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_4"]
+atlas = ExtResource("idle")
+region = Rect2(320, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_5"]
+atlas = ExtResource("idle")
+region = Rect2(400, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="idle_6"]
+atlas = ExtResource("idle")
+region = Rect2(480, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("run")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("run")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("run")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("run")
+region = Rect2(240, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_4"]
+atlas = ExtResource("run")
+region = Rect2(320, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_5"]
+atlas = ExtResource("run")
+region = Rect2(400, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_6"]
+atlas = ExtResource("run")
+region = Rect2(480, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="run_7"]
+atlas = ExtResource("run")
+region = Rect2(560, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="hit_0"]
+atlas = ExtResource("hit")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="hit_1"]
+atlas = ExtResource("hit")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="hit_2"]
+atlas = ExtResource("hit")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="hit_3"]
+atlas = ExtResource("hit")
+region = Rect2(240, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="hit_4"]
+atlas = ExtResource("hit")
+region = Rect2(320, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_0"]
+atlas = ExtResource("die")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_1"]
+atlas = ExtResource("die")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_2"]
+atlas = ExtResource("die")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_3"]
+atlas = ExtResource("die")
+region = Rect2(240, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_4"]
+atlas = ExtResource("die")
+region = Rect2(320, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_5"]
+atlas = ExtResource("die")
+region = Rect2(400, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_6"]
+atlas = ExtResource("die")
+region = Rect2(480, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_7"]
+atlas = ExtResource("die")
+region = Rect2(560, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_8"]
+atlas = ExtResource("die")
+region = Rect2(640, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_9"]
+atlas = ExtResource("die")
+region = Rect2(720, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_10"]
+atlas = ExtResource("die")
+region = Rect2(800, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_11"]
+atlas = ExtResource("die")
+region = Rect2(880, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_12"]
+atlas = ExtResource("die")
+region = Rect2(960, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_13"]
+atlas = ExtResource("die")
+region = Rect2(1040, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="die_14"]
+atlas = ExtResource("die")
+region = Rect2(1120, 0, 80, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("run_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_7")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("hit_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("hit_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("hit_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("hit_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("hit_4")
+}],
+"loop": false,
+"name": &"hit",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("die_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_10")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_11")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_12")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_13")
+}, {
+"duration": 1.0,
+"texture": SubResource("die_14")
+}],
+"loop": false,
+"name": &"die",
+"speed": 12.0
+}]
