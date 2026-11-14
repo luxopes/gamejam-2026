@@ -31,6 +31,11 @@ signal health_changed(health: int, max_health: int)
 @export var dash_time := 0.18         ## jak dlouho dash trvá (s)
 @export var dash_cooldown := 0.5      ## pauza mezi dashi (s)
 
+@export_group("Rozhlížení")
+@export var look_delay := 0.4         ## jak dlouho držet W/S, než se kamera pohne (s)
+@export var look_distance := 180.0    ## o kolik se kamera posune nahoru/dolů (px)
+@export var look_speed := 600.0       ## jak rychle kamera sjede (px/s)
+
 var _coyote := 0.0
 var _buffer := 0.0
 var _jumping := false   # true jen u normálního skoku, aby šlo zkrátit puštěním klávesy
@@ -45,12 +50,14 @@ var _dash_cooldown_timer := 0.0
 var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo pogo
 var _dead := false
 var _invulnerable_timer := 0.0
+var _look_timer := 0.0
 
 @onready var health := max_health
 @onready var _hurtbox: Area2D = $Hurtbox
 
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: ColorRect = $AttackArea/Slash
+@onready var _camera: Camera2D = $Camera2D
 
 
 func _ready() -> void:
@@ -66,6 +73,7 @@ func _physics_process(delta: float) -> void:
 	_update_hurt(delta)
 	if _dead:
 		return
+	_update_look(delta)
 	if _update_dash(delta):
 		return
 
@@ -218,6 +226,24 @@ func _update_dash(delta: float) -> bool:
 	if global_position.y > fall_limit_y:
 		die()
 	return true
+
+
+## Rozhlížení jako v Hollow Knight: hráč stojí na zemi a drží W/S,
+## po chvilce kamera sjede nahoru/dolů. Jakýkoli pohyb ji vrátí.
+func _update_look(delta: float) -> void:
+	var look := Input.get_axis("move_up", "move_down")
+	var standing := is_on_floor() and absf(velocity.x) < 1.0 \
+			and Input.get_axis("move_left", "move_right") == 0.0 \
+			and _attack_timer <= 0.0 and _dash_timer <= 0.0
+	if standing and look != 0.0:
+		_look_timer += delta
+	else:
+		_look_timer = 0.0
+
+	var target := 0.0
+	if _look_timer >= look_delay:
+		target = signf(look) * look_distance
+	_camera.offset.y = move_toward(_camera.offset.y, target, look_speed * delta)
 
 
 ## Zranění od čehokoli ve skupině "hurts_player" (bodáky, nepřátelé).
