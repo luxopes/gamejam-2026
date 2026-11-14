@@ -131,13 +131,6 @@ func _update_attack(delta: float) -> void:
 			attack_direction = Vector2.LEFT
 		elif Input.is_action_just_pressed("attack_right"):
 			attack_direction = Vector2.RIGHT
-		elif Input.is_action_just_pressed("attack"):
-			# Gamepad míří páčkou nebo křížem a útočí tlačítkem X.
-			attack_direction = Vector2(_facing, 0.0)
-			if Input.is_action_pressed("move_up"):
-				attack_direction = Vector2.UP
-			elif Input.is_action_pressed("move_down") and not is_on_floor():
-				attack_direction = Vector2.DOWN
 		if attack_direction != Vector2.ZERO:
 			_start_attack(attack_direction)
 
