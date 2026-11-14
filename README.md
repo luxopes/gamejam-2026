@@ -36,6 +36,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
 | `scenes/vfx/` + `scripts/vfx.gd` | efekty: sek, zásah, zranění, dash, prach ze skoku a dopadu |
 | `assets/vfx/` | obrázky efektů (viz Zdroje assetů) |
+| `assets/characters/poutnik/` | sprite hráče (poutník): sheety a `poutnik_frames.tres` s animacemi |
 | `scripts/game.gd` | globální stav (`Game`): mince, restart, přechod do další úrovně |
 
 ## Nejčastější úpravy
@@ -55,11 +56,13 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 - **Životy:** hráč má 5 životů, po zásahu chvíli bliká a je nezranitelný.
   Po smrti začíná na posledním checkpointu. Čísla jsou u `Player` ve skupině
   **Životy**, pro HUD je připravený signál `health_changed`.
-- **Sprite postavy:** v `player.tscn` vyber uzel `Sprite` (AnimatedSprite2D),
-  v Inspektoru u `Sprite Frames` vytvoř nové SpriteFrames a přidej animace
-  `idle`, `run`, `jump`, `fall`, `attack` a `dash` (volitelně `attack_up`
-  a `attack_down`). Kód je přepíná sám a otáčí postavu podle směru. Jakmile má
-  `Sprite` animace, náhradní červený obdélník se sám schová.
+- **Sprite postavy:** animace poutníka jsou v
+  `assets/characters/poutnik/poutnik_frames.tres` (uzel `Sprite` v `player.tscn`).
+  Kód sám přepíná `idle`, `run`, `jump`, `fall`, `dash`, `look_up` a `look_down`
+  a otáčí postavu podle směru. Sek zatím animaci nemá, až bude, stačí přidat
+  `attack` (volitelně `attack_up`, `attack_down`). Sheety mají snímky 128×128
+  a ve hře se zmenšují na polovinu s vyhlazením (mipmapy), aby postava odpovídala
+  hitboxu 32×48. Poutník ve sheetu kouká doprava (`Sprite Faces Left` u `Player`).
 - **Útok na nepřítele:** když má objekt funkci `hit(direction)`, sek ji zavolá.
   Když je ve skupině `pogo`, hráč se od něj sekem dolů odrazí (vzor: `enemy.tscn`).
 
@@ -67,6 +70,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 
 | Co | Zdroj | Licence |
 |---|---|---|
+| `assets/characters/poutnik/*.png` (hráč) | vlastní tvorba týmu: David | tým |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff` | CC0 1.0 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
