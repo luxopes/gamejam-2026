@@ -95,6 +95,10 @@ func _ready() -> void:
 	var spawn = Game.get_checkpoint(owner)
 	if spawn != null:
 		global_position = spawn
+	# Po pádu do jámy se stejnými životy, po smrti na 0 životů s plnými
+	if Game.respawn_health > 0:
+		health = Game.respawn_health
+		Game.respawn_health = 0
 	health_changed.emit(health, max_health)
 
 
@@ -419,6 +423,7 @@ func die() -> void:
 		return
 	_dead = true
 	set_physics_process(false)   # hráč zamrzne, už se nedá ovládat
+	Game.respawn_health = health   # pád do jámy: zbylé životy; smrt na 0: plné
 
 	var tween := create_tween()
 	tween.set_parallel()         # obě změny běží současně

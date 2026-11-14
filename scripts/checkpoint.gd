@@ -12,9 +12,11 @@ var _healed := false
 
 
 func _ready() -> void:
-	# Po návratu na tenhle checkpoint je rovnou aktivní
+	# Po návratu na tenhle checkpoint je rovnou aktivní a neléčí (hráč se na něm
+	# objevil, jinak by si po pádu do jámy hned přidal život)
 	if Game.get_checkpoint(owner) == global_position:
 		_flag.color = active_color
+		_healed = true
 
 
 func _on_body_entered(body: Node2D) -> void:
