@@ -376,9 +376,9 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	_jumping = false
 
 
-## Doplní životy (třeba na checkpointu).
-func heal_full() -> void:
-	health = max_health
+## Doplní životy (třeba na checkpointu), nejvýš do maxima.
+func heal(amount: int) -> void:
+	health = mini(health + amount, max_health)
 	health_changed.emit(health, max_health)
 
 
