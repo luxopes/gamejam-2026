@@ -66,9 +66,12 @@ var _look_timer := 0.0
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: Vfx = $AttackArea/Slash
 @onready var _camera: Camera2D = $Camera2D
+@onready var _sprite: AnimatedSprite2D = $Sprite
 
 
 func _ready() -> void:
+	# Obdélník je jen náhradní grafika, dokud Sprite nemá animace
+	$ColorRect.visible = _sprite.sprite_frames == null
 	# Po smrti začíná hráč na posledním checkpointu
 	var spawn = Game.get_checkpoint(owner)
 	if spawn != null:
@@ -82,6 +85,7 @@ func _physics_process(delta: float) -> void:
 		return
 	_update_look(delta)
 	if _update_dash(delta):
+		_update_animation()
 		return
 
 	# Gravitace
@@ -128,6 +132,7 @@ func _physics_process(delta: float) -> void:
 
 	if global_position.y > fall_limit_y:
 		die()
+	_update_animation()
 
 
 func _update_attack(delta: float) -> void:
@@ -297,6 +302,34 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 func heal_full() -> void:
 	health = max_health
 	health_changed.emit(health, max_health)
+
+
+## Animace postavy podle stavu. Sprite dodá grafik: v uzlu Sprite (AnimatedSprite2D)
+## stačí vytvořit SpriteFrames s animacemi idle, run, jump, fall, attack a dash.
+## Volitelně attack_up a attack_down, jinak se pro všechny směry použije attack.
+func _update_animation() -> void:
+	var anim := "idle"
+	if _dash_timer > 0.0:
+		anim = "dash"
+	elif _slash.visible:
+		anim = "attack"
+		if _attack_dir == Vector2.UP:
+			anim = "attack_up"
+		elif _attack_dir == Vector2.DOWN:
+			anim = "attack_down"
+	elif not is_on_floor():
+		anim = "jump" if velocity.y < 0.0 else "fall"
+	elif absf(velocity.x) > 1.0:
+		anim = "run"
+	_sprite.flip_h = _facing < 0.0
+
+	var frames := _sprite.sprite_frames
+	if frames == null:
+		return
+	if not frames.has_animation(anim) and anim.begins_with("attack"):
+		anim = "attack"
+	if frames.has_animation(anim) and _sprite.animation != anim:
+		_sprite.play(anim)
 
 
 ## Vytvoří jednorázový efekt v úrovni (zůstane na místě, i když se hráč pohne).
