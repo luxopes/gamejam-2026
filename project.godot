@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Game="*res://scripts/game.gd"
 TimeFlash="*res://scenes/time_flash.tscn"
+Music="*res://scenes/music.tscn"
 
 [display]
 
