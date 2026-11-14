@@ -14,6 +14,7 @@ func set_time(new_time: String) -> void:
 	
 var coins := 0
 var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
+var _new_game := false       # po výhře: R spustí hru znovu od začátku
 var flags := {}
 
 func set_flag(flag: String) -> void:
@@ -66,8 +67,13 @@ func get_checkpoint(level: Node) -> Variant:
 
 ## Zavolá se při smrti hráče nebo klávesou R. Hráč začne na posledním checkpointu.
 func restart_level() -> void:
-	# Vrátí i čas, ve kterém byl checkpoint, ať hráč nestojí ve vzduchu
-	if get_checkpoint(get_tree().current_scene) != null:
+	if _new_game:
+		# Hrát znovu po výhře: mince od nuly a začátek v přítomnosti
+		_new_game = false
+		coins = 0
+		time = "present"
+	elif get_checkpoint(get_tree().current_scene) != null:
+		# Vrátí i čas, ve kterém byl checkpoint, ať hráč nestojí ve vzduchu
 		time = _checkpoint_time
 	# Sebrané mince (počet i samotné mince) zůstávají i po smrti
 	get_tree().reload_current_scene.call_deferred()
@@ -79,6 +85,7 @@ func finish_level(next_scene: String) -> void:
 	_checkpoint_level = ""
 	_collected_coins.clear()
 	if next_scene == "":
+		_new_game = true
 		level_finished.emit()
 	else:
 		coins = 0
