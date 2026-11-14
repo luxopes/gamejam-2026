@@ -72,8 +72,13 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 |---|---|---|
 | `assets/characters/poutnik/*.png` (hráč) | vlastní tvorba týmu: David | tým |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff` | CC0 1.0 |
+| `assets/levels/sunnyland/*` (dlaždice, pozadí, strom, chaloupka, rostliny) | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) od Luis Zuno (ansimuz), licence v `assets/levels/sunnyland/LICENSE.txt` | CC0 1.0 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
+
+Přítomnost i minulost používají stejné dlaždice, jen přebarvené shaderem
+`assets/levels/world_tint.gdshader`: přítomnost do šeda (`present_world.tres`),
+minulost do zelena (`past_world.tres`).
 
 ## Práce v týmu
 

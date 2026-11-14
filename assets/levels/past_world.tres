@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/levels/world_tint.gdshader" id="1_p4st0"]
+
+[resource]
+shader = ExtResource("1_p4st0")
+shader_parameter/desaturation = 0.0
+shader_parameter/tint = Color(0.7, 1, 0.68, 1)
+shader_parameter/brightness = 1.05
