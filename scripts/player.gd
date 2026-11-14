@@ -44,5 +44,19 @@ func _physics_process(delta: float) -> void:
 		die()
 
 
+var _dead := false
+
+
 func die() -> void:
-	Game.restart_level()
+		if _dead:
+				return
+		_dead = true
+		set_physics_process(false)   # hráč zamrzne, už se nedá ovládat
+
+		var tween := create_tween()
+		tween.set_parallel()         # obě změny běží současně
+		tween.tween_property(self, "modulate:a", 0.0, 0.4)        # zprůhlední
+		tween.tween_property(self, "scale", Vector2(1.8, 0.1), 0.4)  # rozplácne se
+		await tween.finished
+
+		Game.restart_level()
