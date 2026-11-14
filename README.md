@@ -10,15 +10,14 @@ všechno jsou barevné obdélníky, takže se dá cokoli hned vyměnit za vlastn
 
 ## Ovládání
 
-| Akce | Klávesy | Gamepad |
-|---|---|---|
-| Pohyb | A / D | páčka, kříž |
-| Skok | Mezerník | A |
-| Útok (sek) | šipka rovnou sekne ve svém směru | X |
-| Dash | Shift | RB |
-| Míření nahoru / dolů | směr určuje stisknutá šipka | páčka, kříž |
-| Rozhlédnout se nahoru / dolů | podržet W / S ve stoje | páčka, kříž |
-| Restart | R | Back |
+| Akce | Klávesy |
+|---|---|
+| Pohyb | A / D |
+| Skok | Mezerník |
+| Útok (sek) | šipka rovnou sekne ve svém směru |
+| Dash | Shift |
+| Rozhlédnout se nahoru / dolů | podržet W / S ve stoje |
+| Restart | R |
 
 Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 
