@@ -218,7 +218,8 @@ func _check_hits() -> void:
 		var from := _attack_area.global_position
 		var ray := PhysicsRayQueryParameters2D.create(from, from + _attack_dir * WALL_REACH, 1, [get_rid()])
 		var wall := get_world_2d().direct_space_state.intersect_ray(ray)
-		if wall and wall.collider is StaticBody2D:
+		# Terén z dlaždic je TileMapLayer, překážky (zával, kmen) StaticBody2D
+		if wall and (wall.collider is StaticBody2D or wall.collider is TileMapLayer):
 			_hit_wall = true
 			Vfx.spawn(HIT_SPARK, get_parent(), wall.position)
 			_apply_hit_reaction()
