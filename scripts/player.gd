@@ -25,6 +25,7 @@ signal health_changed(health: int, max_health: int)
 @export var recoil_speed := 260.0     ## odhození dozadu po seku do strany
 @export var recoil_time := 0.12       ## jak dlouho odhození přebije ovládání (s)
 @export var up_recoil := 150.0        ## sražení dolů po seku nahoru
+@export var vertical_attack_width := 32.0  ## šířka seku nahoru/dolů = šířka hráče (sek do strany má 56)
 
 @export_group("Dash")
 @export var dash_speed := 900.0       ## rychlost dashe (px/s)
@@ -69,6 +70,8 @@ var _look_timer := 0.0
 
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: Vfx = $AttackArea/Slash
+@onready var _attack_shape: CollisionShape2D = $AttackArea/CollisionShape2D
+@onready var _side_attack_size: Vector2 = _attack_shape.shape.size
 @onready var _camera: Camera2D = $Camera2D
 @onready var _sprite: AnimatedSprite2D = $Sprite
 
@@ -165,6 +168,10 @@ func _start_attack(direction: Vector2) -> void:
 	if direction.x != 0.0:
 		_facing = direction.x
 	_attack_area.rotation = _attack_dir.angle()
+	# Sek nahoru/dolů je užší, aby pogo nešlo od bodáků vedle hráče
+	_attack_shape.shape.size = _side_attack_size
+	if direction.x == 0.0:
+		_attack_shape.shape.size.y = vertical_attack_width
 	_attack_timer = attack_duration
 	_cooldown_timer = attack_cooldown
 	_already_hit.clear()
@@ -174,13 +181,10 @@ func _start_attack(direction: Vector2) -> void:
 
 
 func _check_hits() -> void:
-	var targets: Array[Node] = []
-	targets.append_array(_attack_area.get_overlapping_areas())
-	targets.append_array(_attack_area.get_overlapping_bodies())
-	for target in targets:
+	for target in _attack_targets():
 		if target == self or target in _already_hit:
 			continue
-		var hittable := target.has_method("hit")
+		var hittable: bool = target.has_method("hit")
 		if not hittable and not target.is_in_group("pogo"):
 			continue
 		_already_hit.append(target)
@@ -201,6 +205,22 @@ func _check_hits() -> void:
 			_apply_hit_reaction()
 
 
+## Co právě zasahuje sek. Ptá se fyziky přímo s aktuálním otočením a velikostí seku;
+## dotyky oblasti (get_overlapping_*) by v prvním snímku platily ještě pro minulý sek.
+func _attack_targets() -> Array:
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = _attack_shape.shape
+	query.transform = _attack_shape.global_transform
+	query.collision_mask = _attack_area.collision_mask
+	query.collide_with_areas = true
+	query.exclude = [get_rid()]
+	var found := []
+	for hit in get_world_2d().direct_space_state.intersect_shape(query, 32):
+		if not hit.collider in found:
+			found.append(hit.collider)
+	return found
+
+
 ## Odraz hráče po zásahu, jednou za sek.
 func _apply_hit_reaction() -> void:
 	if _recoiled:
@@ -208,7 +228,9 @@ func _apply_hit_reaction() -> void:
 	_recoiled = true
 	match _attack_dir:
 		Vector2.DOWN:
-			# Pogo
+			# Pogo jen ve vzduchu; sek dolů na zemi se přehraje, ale neodrazí
+			if is_on_floor():
+				return
 			velocity.y = pogo_velocity
 			_jumping = false
 			_can_air_dash = true
