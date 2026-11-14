@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1"]
 [ext_resource type="Script" uid="uid://5q0dk48gdukk" path="res://scripts/time_world.gd" id="1_pa8r4"]
 [ext_resource type="PackedScene" path="res://scenes/platform.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bfwihgm1nsfxy" path="res://scenes/crystal.tscn" id="2_2y5yt"]
 [ext_resource type="PackedScene" uid="uid://ghoj7537x54f" path="res://scenes/portal.tscn" id="2_15mv3"]
 [ext_resource type="PackedScene" path="res://scenes/coin.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://0t06iekngmp2" path="res://scenes/hazard.tscn" id="4"]
@@ -14,6 +15,9 @@
 script = ExtResource("1_pa8r4")
 
 [node name="Present" type="Node2D" parent="." unique_id=1728303134]
+
+[node name="Crystal" parent="Present" unique_id=558630458 instance=ExtResource("2_2y5yt")]
+position = Vector2(1280, 560)
 
 [node name="Portal" parent="Present" unique_id=1740757390 instance=ExtResource("2_15mv3")]
 position = Vector2(1100, 600)
@@ -64,9 +68,9 @@ position = Vector2(1280, 460)
 [node name="Hazard1" parent="Present/Hazards" unique_id=1916625067 instance=ExtResource("4")]
 position = Vector2(1700, 600)
 
-[node name="Enemies" type="Node2D" parent="Present"]
+[node name="Enemies" type="Node2D" parent="Present" unique_id=274096308]
 
-[node name="Enemy1" parent="Present/Enemies" instance=ExtResource("7")]
+[node name="Enemy1" parent="Present/Enemies" unique_id=1444745321 instance=ExtResource("7")]
 position = Vector2(300, 600)
 
 [node name="Goal" parent="Present" unique_id=1783578996 instance=ExtResource("5")]
