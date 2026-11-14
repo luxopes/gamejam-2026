@@ -69,15 +69,23 @@ func get_checkpoint(level: Node) -> Variant:
 ## Zavolá se při smrti hráče nebo klávesou R. Hráč začne na posledním checkpointu.
 func restart_level() -> void:
 	if _new_game:
-		# Hrát znovu po výhře: mince od nuly a začátek v přítomnosti
-		_new_game = false
-		coins = 0
-		time = "present"
+		new_game()   # hrát znovu po výhře
 	elif get_checkpoint(get_tree().current_scene) != null:
 		# Vrátí i čas, ve kterém byl checkpoint, ať hráč nestojí ve vzduchu
 		time = _checkpoint_time
 	# Sebrané mince (počet i samotné mince) zůstávají i po smrti
 	get_tree().reload_current_scene.call_deferred()
+
+
+## Nová hra od začátku: mince od nuly, hádanky nevyřešené, žádný checkpoint, přítomnost.
+func new_game() -> void:
+	coins = 0
+	flags.clear()
+	_collected_coins.clear()
+	_checkpoint_level = ""
+	_new_game = false
+	restart_locked = false
+	time = "present"
 
 
 ## Zavolá cíl. Když je next_scene prázdné, hra končí výhrou.
