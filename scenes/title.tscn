@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/title.gd" id="1"]
+[ext_resource type="VideoStream" path="res://assets/video/title_bg.ogv" id="2"]
 
 [node name="Title" type="Control"]
 layout_mode = 3
@@ -19,6 +20,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.07, 0.06, 1)
+
+[node name="Video" type="VideoStreamPlayer" parent="."]
+modulate = Color(0.45, 0.45, 0.45, 1)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("2")
+autoplay = true
+expand = true
+loop = true
 
 [node name="Box" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -39,12 +54,16 @@ horizontal_alignment = 1
 
 [node name="Start" type="Label" parent="Box"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 36
 text = "Press ENTER to start"
 horizontal_alignment = 1
 
 [node name="Controls" type="Label" parent="Box"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
 modulate = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 22
 text = "Move A / D   Jump SPACE   Attack ARROWS   Dash SHIFT
