@@ -1,0 +1,60 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/crystal.png" id="sheet"]
+
+[sub_resource type="AtlasTexture" id="crystal_0"]
+atlas = ExtResource("sheet")
+region = Rect2(0, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_1"]
+atlas = ExtResource("sheet")
+region = Rect2(64, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_2"]
+atlas = ExtResource("sheet")
+region = Rect2(128, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_3"]
+atlas = ExtResource("sheet")
+region = Rect2(192, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_4"]
+atlas = ExtResource("sheet")
+region = Rect2(256, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_5"]
+atlas = ExtResource("sheet")
+region = Rect2(320, 0, 64, 120)
+
+[sub_resource type="AtlasTexture" id="crystal_6"]
+atlas = ExtResource("sheet")
+region = Rect2(384, 0, 64, 120)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("crystal_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("crystal_6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]

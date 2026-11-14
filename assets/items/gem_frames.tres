@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/gem.png" id="sheet"]
+
+[sub_resource type="AtlasTexture" id="gem_0"]
+atlas = ExtResource("sheet")
+region = Rect2(0, 0, 15, 13)
+
+[sub_resource type="AtlasTexture" id="gem_1"]
+atlas = ExtResource("sheet")
+region = Rect2(15, 0, 15, 13)
+
+[sub_resource type="AtlasTexture" id="gem_2"]
+atlas = ExtResource("sheet")
+region = Rect2(30, 0, 15, 13)
+
+[sub_resource type="AtlasTexture" id="gem_3"]
+atlas = ExtResource("sheet")
+region = Rect2(45, 0, 15, 13)
+
+[sub_resource type="AtlasTexture" id="gem_4"]
+atlas = ExtResource("sheet")
+region = Rect2(60, 0, 15, 13)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("gem_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("gem_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("gem_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("gem_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("gem_4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]

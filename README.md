@@ -81,6 +81,8 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `assets/music/past.mp3` (hudba minulosti) | David (tým), se zvukem [Ambience, Forest, Bird Sing, Black Forest Czech Republic](https://www.epidemicsound.com/sound-effects/tracks/01136a7f-b7ce-4e05-be80-be15e7fac08d/) z Epidemic Sound | tým; zvuk z Epidemic Sound podle předplatného |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff`, `treasure-glint` → `treasure_glint` (třpyt u hádankových věcí), `bloom-heal` → `bloom_heal` (rozkvět výhonku) | CC0 1.0 |
 | `assets/vfx/portal.png` (portál) | [Portals 32 x 48](https://opengameart.org/content/portals-32-x-48) od RodHakGames, soubor beze změny; používá se modrý (do přítomnosti) a oranžový řádek (do minulosti) | CC0 1.0, autor prosí o uvedení: „Portals made by RodHakGames - RHG“ |
+| `assets/items/gem.png` (mince), `assets/vfx/item_feedback.png` (efekt sebrání) | [Sunny Land](https://opengameart.org/content/sunny-land-2d-pixel-art-pack) od Luis Zuno (ansimuz); `gem` beze změny, `item-feedback-1` až `4` spojené do jednoho pásu | CC0 1.0 |
+| `assets/items/crystal.png` (odrazový krystal) | [Ancient Crystal 2D Pixel Art](https://opengameart.org/content/ancient-crystal-2d-pixel-art) od One To Zero, soubor beze změny | CC0 1.0 |
 | `assets/levels/sunnyland/*` (dlaždice, pozadí, strom, chaloupka, rostliny) | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) od Luis Zuno (ansimuz), licence v `assets/levels/sunnyland/LICENSE.txt` | CC0 1.0 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
