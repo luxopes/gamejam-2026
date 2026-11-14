@@ -4,7 +4,8 @@
 /android/
 
 # Exporty hry
-/build/
+/build/*
+!/build/.gdignore
 /export/
 *.zip
 
