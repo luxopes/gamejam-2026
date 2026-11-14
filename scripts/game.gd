@@ -16,6 +16,7 @@ func set_time(new_time: String) -> void:
 var coins := 0
 var _collected_coins := {}   # sebrané mince, zůstávají i po smrti
 var _new_game := false       # po výhře: R spustí hru znovu od začátku
+var restart_locked := false  # během závěrečných titulků R nefunguje
 var flags := {}
 
 func set_flag(flag: String) -> void:
@@ -93,5 +94,5 @@ func finish_level(next_scene: String) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("restart"):
+	if event.is_action_pressed("restart") and not restart_locked:
 		restart_level()

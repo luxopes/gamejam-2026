@@ -1,5 +1,5 @@
 extends CanvasLayer
-## Horní lišta: srdíčka podle životů, mince s počtem a hláška o výhře.
+## Horní lišta: srdíčka podle životů a mince s počtem. Konec hry ukazují titulky (Credits).
 
 const HEARTS := preload("res://assets/ui/hearts.png")
 const HEART_SIZE := Vector2(17, 15)   ## jedno srdíčko v obrázku (plné, poloviční, prázdné vedle sebe)
@@ -11,9 +11,7 @@ const HEART_SCALE := 3.0              ## zvětšení pixelů srdíčka
 
 func _ready() -> void:
 	Game.coins_changed.connect(_on_coins_changed)
-	Game.level_finished.connect($Message.show)
 	_on_coins_changed(Game.coins)
-	$Message.hide()
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.health_changed.connect(_on_health_changed)

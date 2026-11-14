@@ -2,22 +2,10 @@
 
 [ext_resource type="Script" uid="uid://r2wxgyxtehmu" path="res://scripts/hud.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cukgw3hhynnlk" path="res://assets/ui/coins.png" id="2_oo0fn"]
+[ext_resource type="PackedScene" path="res://scenes/credits.tscn" id="3_credits"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1000602809]
 script = ExtResource("1")
-
-[node name="Message" type="Label" parent="." unique_id=284036901]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 56
-text = "The forest bounced back.
-R = play again"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Bar" type="VBoxContainer" parent="." unique_id=1751286105]
 offset_left = 16.0
@@ -48,3 +36,5 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 40
 text = "0"
 vertical_alignment = 1
+
+[node name="Credits" parent="." instance=ExtResource("3_credits")]
