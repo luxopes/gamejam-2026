@@ -3,7 +3,14 @@ extends Node
 
 signal coins_changed(count: int)
 signal level_finished
+signal time_changed(time: String)
 
+var time := "present"
+
+func set_time(new_time: String) -> void:
+	time = new_time
+	time_changed.emit(time)
+	
 var coins := 0
 
 
