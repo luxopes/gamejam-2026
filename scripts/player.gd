@@ -1,6 +1,9 @@
 extends CharacterBody2D
 ## Hráč. Všechna čísla níže jdou měnit v Inspektoru (klikni na uzel Player).
 
+## Pro HUD: zavolá se při každé změně životů.
+signal health_changed(health: int, max_health: int)
+
 @export var speed := 300.0            ## rychlost běhu (px/s)
 @export var acceleration := 2500.0    ## jak rychle se rozběhne a zastaví
 @export var jump_velocity := -560.0   ## síla skoku (záporné = nahoru)
@@ -8,6 +11,12 @@ extends CharacterBody2D
 @export var coyote_time := 0.1        ## jak dlouho po opuštění hrany jde ještě skočit
 @export var jump_buffer := 0.1        ## jak dlouho před dopadem si hra pamatuje stisk skoku
 @export var fall_limit_y := 1000.0    ## pod touto výškou hráč umírá
+
+@export_group("Životy")
+@export var max_health := 5
+@export var invulnerable_time := 1.0  ## nezranitelnost po zásahu (s)
+@export var hurt_knockback := Vector2(300.0, -350.0)  ## odhození po zásahu (do strany, nahoru)
+@export var hurt_stun := 0.25         ## jak dlouho po zásahu nejde ovládat (s)
 
 @export_group("Útok")
 @export var attack_duration := 0.1    ## jak dlouho sek zasahuje (s)
@@ -34,6 +43,11 @@ var _recoil_timer := 0.0
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
 var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo pogo
+var _dead := false
+var _invulnerable_timer := 0.0
+
+@onready var health := max_health
+@onready var _hurtbox: Area2D = $Hurtbox
 
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _slash: ColorRect = $AttackArea/Slash
@@ -41,9 +55,13 @@ var _can_air_dash := true   # ve vzduchu jen jeden dash, obnoví ho dopad nebo p
 
 func _ready() -> void:
 	_slash.visible = false
+	health_changed.emit(health, max_health)
 
 
 func _physics_process(delta: float) -> void:
+	_update_hurt(delta)
+	if _dead:
+		return
 	if _update_dash(delta):
 		return
 
@@ -86,9 +104,6 @@ func _physics_process(delta: float) -> void:
 
 	if global_position.y > fall_limit_y:
 		die()
-
-
-var _dead := false
 
 
 func _update_attack(delta: float) -> void:
@@ -186,6 +201,52 @@ func _update_dash(delta: float) -> bool:
 	if global_position.y > fall_limit_y:
 		die()
 	return true
+
+
+## Zranění od čehokoli ve skupině "hurts_player" (bodáky, nepřátelé).
+## Kontroluje se každý snímek, takže zraní i to, v čem hráč stojí po konci nezranitelnosti.
+func _update_hurt(delta: float) -> void:
+	if _invulnerable_timer > 0.0:
+		_invulnerable_timer -= delta
+		modulate.a = 0.3 if fmod(_invulnerable_timer, 0.2) < 0.1 else 1.0  # blikání
+		if _invulnerable_timer <= 0.0:
+			modulate.a = 1.0
+		return
+
+	var sources: Array[Node2D] = []
+	sources.append_array(_hurtbox.get_overlapping_areas())
+	sources.append_array(_hurtbox.get_overlapping_bodies())
+	for source in sources:
+		if source.is_in_group("hurts_player"):
+			take_damage(1, source.global_position)
+			return
+
+
+func take_damage(amount: int, from_position: Vector2) -> void:
+	if _dead or _invulnerable_timer > 0.0:
+		return
+	health = maxi(health - amount, 0)
+	health_changed.emit(health, max_health)
+	if health == 0:
+		die()
+		return
+
+	_invulnerable_timer = invulnerable_time
+	# Odhodí hráče od zdroje zranění a na chvíli mu vezme ovládání
+	var away := signf(global_position.x - from_position.x)
+	if away == 0.0:
+		away = -_facing
+	velocity = Vector2(away * hurt_knockback.x, hurt_knockback.y)
+	_recoil_timer = hurt_stun
+	_dash_timer = 0.0
+	modulate = Color.WHITE   # zásah utne dash, vrátí barvu z dashe
+	_jumping = false
+
+
+## Doplní životy (třeba na checkpointu).
+func heal_full() -> void:
+	health = max_health
+	health_changed.emit(health, max_health)
 
 
 func die() -> void:
