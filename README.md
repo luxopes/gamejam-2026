@@ -76,6 +76,7 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `assets/characters/poutnik/*.png` (hráč) | vlastní tvorba týmu: David | tým |
 | `assets/characters/mushroom/*.png` (nepřítel) | [Forest Monsters 2D Pixel Art](https://monopixelart.itch.io/forest-monsters-pixel-art) od MonoPixelArt, bezplatná verze: Mushroom (`Idle`, `Run`, `Die` bez VFX, `Hit` s VFX), soubory beze změny | použití v jakémkoli projektu i komerčně; balíček se nesmí přeprodávat ani šířit dál jako assety |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff` | CC0 1.0 |
+| `assets/vfx/portal.png` (portál) | [Portals 32 x 48](https://opengameart.org/content/portals-32-x-48) od RodHakGames, soubor beze změny; používá se modrý (do přítomnosti) a oranžový řádek (do minulosti) | CC0 1.0, autor prosí o uvedení: „Portals made by RodHakGames - RHG“ |
 | `assets/levels/sunnyland/*` (dlaždice, pozadí, strom, chaloupka, rostliny) | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) od Luis Zuno (ansimuz), licence v `assets/levels/sunnyland/LICENSE.txt` | CC0 1.0 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
