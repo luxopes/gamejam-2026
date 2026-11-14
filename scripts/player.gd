@@ -40,6 +40,7 @@ signal health_changed(health: int, max_health: int)
 @export var landing_dust_speed := 400.0  ## od jaké rychlosti pádu se při dopadu zvedne prach (px/s)
 @export var sprite_faces_left := false   ## kam kouká postava ve sheetu (poutník kouká doprava)
 
+const WALL_REACH := 64.0   # kam až sek do strany dosáhne na zeď (konec oblasti seku)
 const HIT_SPARK := preload("res://scenes/vfx/hit_spark.tscn")
 const HURT_BURST := preload("res://scenes/vfx/hurt_burst.tscn")
 const DASH_DUST := preload("res://scenes/vfx/dash_dust.tscn")
@@ -53,6 +54,8 @@ var _attack_timer := 0.0
 var _cooldown_timer := 0.0
 var _attack_dir := Vector2.RIGHT
 var _already_hit: Array[Node] = []
+var _recoiled := false   # odraz po zásahu jen jednou za sek
+var _hit_wall := false
 var _recoil_timer := 0.0
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
@@ -165,6 +168,8 @@ func _start_attack(direction: Vector2) -> void:
 	_attack_timer = attack_duration
 	_cooldown_timer = attack_cooldown
 	_already_hit.clear()
+	_recoiled = false
+	_hit_wall = false
 	_slash.play()
 
 
@@ -184,11 +189,23 @@ func _check_hits() -> void:
 			target.hit(_attack_dir)
 		_apply_hit_reaction()
 
+	# Zeď: sek do strany se od ní odrazí jako v Hollow Knight. Paprsek jde ve výšce
+	# hrudi, aby se nepočítala podlaha, o kterou spodek seku vždycky zavadí.
+	if _attack_dir.x != 0.0 and not _hit_wall:
+		var from := _attack_area.global_position
+		var query := PhysicsRayQueryParameters2D.create(from, from + _attack_dir * WALL_REACH, 1, [get_rid()])
+		var wall := get_world_2d().direct_space_state.intersect_ray(query)
+		if wall and wall.collider is StaticBody2D:
+			_hit_wall = true
+			_spawn_vfx(HIT_SPARK, wall.position)
+			_apply_hit_reaction()
+
 
 ## Odraz hráče po zásahu, jednou za sek.
 func _apply_hit_reaction() -> void:
-	if _already_hit.size() > 1:
+	if _recoiled:
 		return
+	_recoiled = true
 	match _attack_dir:
 		Vector2.DOWN:
 			# Pogo
