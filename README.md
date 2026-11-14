@@ -32,13 +32,14 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | `scenes/coin.tscn` | mince |
 | `scenes/hazard.tscn` | bodáky, dotyk ubere život |
 | `scenes/checkpoint.tscn` | checkpoint: po smrti tu hráč začne, doplní životy |
-| `scenes/enemy.tscn` | nepřítel: chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
+| `scenes/enemy.tscn` | nepřítel (houba): chodí tam a zpět, po seku odletí, náraz do zdi ho zničí |
 | `scenes/goal.tscn` | cíl úrovně |
 | `scenes/hud.tscn` | počítadlo mincí a hláška o výhře |
 | `scenes/time_flash.tscn` | bílý záblesk obrazovky při přechodu časem (autoload `TimeFlash`) |
 | `scenes/vfx/` + `scripts/vfx.gd` | efekty: sek, zásah, zranění, dash, prach ze skoku a dopadu |
 | `assets/vfx/` | obrázky efektů (viz Zdroje assetů) |
 | `assets/characters/poutnik/` | sprite hráče (poutník): sheety a `poutnik_frames.tres` s animacemi |
+| `assets/characters/mushroom/` | sprite nepřítele (houba): sheety a `mushroom_frames.tres` s animacemi |
 | `scripts/game.gd` | globální stav (`Game`): mince, restart, přechod do další úrovně |
 
 ## Nejčastější úpravy
@@ -73,10 +74,20 @@ Klávesy se mění v *Projekt → Nastavení projektu → Mapa vstupů*.
 | Co | Zdroj | Licence |
 |---|---|---|
 | `assets/characters/poutnik/*.png` (hráč) | vlastní tvorba týmu: David | tým |
+| `assets/characters/mushroom/*.png` (nepřítel) | [Forest Monsters 2D Pixel Art](https://monopixelart.itch.io/forest-monsters-pixel-art) od MonoPixelArt, bezplatná verze: Mushroom (`Idle`, `Run`, `Die` bez VFX, `Hit` s VFX), soubory beze změny | použití v jakémkoli projektu i komerčně; balíček se nesmí přeprodávat ani šířit dál jako assety |
 | `assets/vfx/*.png` (efekty) | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) od nerijs (Pixel VFX Studio), styl Strict: `axe-smear` → `slash`, `hit-spark` → `hit_spark`, `punch-hit` → `hurt_burst`, `dash-dust` → `dash_dust`, `dust-puff` → `dust_puff` | CC0 1.0 |
 | `assets/levels/sunnyland/*` (dlaždice, pozadí, strom, chaloupka, rostliny) | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) od Luis Zuno (ansimuz), licence v `assets/levels/sunnyland/LICENSE.txt` | CC0 1.0 |
 
 VFX from PVFX Foundry by Pixel VFX Studio.
+
+Mushroom from Forest Monsters 2D Pixel Art by MonoPixelArt.
+
+Licence houby: „use this asset pack in any project, commercial or not, but refrain
+from reselling, redistributing, or modifying it“. Autor v komentářích upřesnil, že
+bezplatná verze jde použít komerčně a úpravy jsou povolené, jen ne za účelem
+přeprodeje. Ve hře ji použít smíme. Kdyby se repozitář zveřejnil, šly by z něj
+původní obrázky volně stáhnout, což se blíží šíření, takže se předtím zeptejte
+autora, nebo `assets/characters/mushroom/` vyjměte.
 
 Přítomnost i minulost používají stejné dlaždice, jen přebarvené shaderem
 `assets/levels/world_tint.gdshader`: přítomnost do šeda (`present_world.tres`),
