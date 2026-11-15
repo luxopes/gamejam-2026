@@ -29,7 +29,7 @@ Collected coins and solved puzzles survive death; checkpoints restore health.
 | File | Purpose |
 |---|---|
 | `scenes/title.tscn` | Title screen; the game starts here |
-| `scenes/level_forest.tscn` | Main level, generated from `levels/level_forest.json` |
+| `scenes/level_forest.tscn` | Main level |
 | `scenes/level_1.tscn` | Original test level |
 | `scenes/player.tscn`, `scripts/player.gd` | Movement, combat and camera |
 | `scripts/time_world.gd` | Switches between the past and present |
@@ -44,25 +44,10 @@ Player settings are exported on the `Player` node. Character animations are in
 `assets/characters/poutnik/poutnik_frames.tres`; enemy animations are in
 `assets/characters/mushroom/mushroom_frames.tres`.
 
-Coordinate forest layout changes with Antonín. The level editor reads
-`levels/level_forest.json` and generates `scenes/level_forest.tscn`, overwriting
-manual edits to that scene. To open the editor, run this from the project root
-with Python 3 and `godot` on your PATH:
+## Team
 
-```sh
-python3 tools/level_editor/server.py
-```
-
-The editor opens at `http://127.0.0.1:8765`. Set `GODOT` to the executable path
-if Godot is installed under a different name or location.
-
-See [AGENTS.md](AGENTS.md) for the Git workflow, Czech commit format and code
-conventions. After cloning, enable the commit hook and rebase pulls:
-
-```sh
-git config core.hooksPath .githooks
-git config pull.rebase true
-```
+- Antonín and Jakub: programming, debugging and development
+- David: character art and music
 
 ## Credits and asset licenses
 
@@ -87,6 +72,3 @@ git config pull.rebase true
 | Font — `assets/fonts/PixelifySans.ttf` | [Pixelify Sans](https://github.com/google/fonts/tree/main/ofl/pixelifysans) by Stefie Justprince | [SIL OFL 1.1](assets/fonts/PixelifySans-OFL.txt) |
 
 Portals made by RodHakGames - RHG.
-
-The mushroom pack has separate restrictions on distributing its source assets.
-Check with the author before publishing those files in a public repository.
