@@ -22,7 +22,9 @@ title screen to start.
 | Pause / resume | Esc |
 
 After finishing the game, wait for the credits to end, then press R to play again.
-Collected coins and solved puzzles survive death; checkpoints restore health.
+Collected coins and solved puzzles survive death. Each checkpoint restores one
+heart, and when you are hurt, picking up a coin with at least 3 coins spends 3
+of them to heal one heart automatically.
 
 ## Working on the game
 
