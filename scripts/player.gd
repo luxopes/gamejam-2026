@@ -359,6 +359,10 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 	_jumping = false
 
 
+func shake() -> void:
+	_shake_timer = shake_time
+
+
 func heal(amount: int) -> void:
 	health = mini(health + amount, max_health)
 	health_changed.emit(health, max_health)

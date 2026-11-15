@@ -10,6 +10,8 @@ extends CharacterBody2D
 @export var sprite_faces_left := true
 @export var fade_time := 0.3
 
+const DEATH_PUFF := preload("res://scenes/vfx/enemy_death.tscn")
+
 var _direction := -1.0
 var _knockback_timer := 0.0
 var _dead := false
@@ -56,6 +58,7 @@ func hit(direction: Vector2) -> void:
 	if _dead:
 		return
 	health -= 1
+	_flash()
 	if health <= 0:
 		_destroy()
 		return
@@ -80,8 +83,15 @@ func _destroy() -> void:
 	collision_layer = 0
 	_sprite.play("die")
 	await _sprite.animation_finished
+	Vfx.spawn(DEATH_PUFF, get_parent(), global_position + Vector2(0, -20))
 	await create_tween().tween_property(self, "modulate:a", 0.0, fade_time).finished
 	queue_free()
+
+
+# Krátké bílé probliknutí, ať je zásah vidět.
+func _flash() -> void:
+	_sprite.modulate = Color(3, 3, 3)
+	create_tween().tween_property(_sprite, "modulate", Color.WHITE, 0.15)
 
 
 func _face(dir: float) -> void:

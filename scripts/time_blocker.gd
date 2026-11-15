@@ -12,6 +12,8 @@ const ROCKS_WIDTH := 64.0
 const TILES := preload("res://assets/levels/forest_tiles.tres")
 const ROCK := preload("res://assets/levels/sunnyland/rock.png")
 const ROCK_FILL := [138, 198, 137, 138]
+const ROCK_SHATTER := preload("res://scenes/vfx/rock_shatter.tscn")
+const DUST_PUFF := preload("res://scenes/vfx/dust_puff.tscn")
 
 
 func _ready() -> void:
@@ -21,14 +23,37 @@ func _ready() -> void:
 
 
 func _on_flag_changed(changed: String) -> void:
-	if changed == flag:
-		_update()
+	if changed != flag:
+		return
+	var active := Game.has_flag(flag) == appears
+	$CollisionShape2D.set_deferred("disabled", not active)
+	# Tween patří překážce, takže ve skrytém světě počká, až se tam hráč vrátí.
+	var tween := create_tween()
+	tween.tween_callback(_burst)
+	if active:
+		visible = true
+		modulate.a = 0.0
+		tween.tween_property(self, "modulate:a", 1.0, 0.3)
+	else:
+		tween.tween_property(self, "modulate:a", 0.0, 0.2)
+		tween.tween_callback(hide)
 
 
 func _update() -> void:
 	var active := Game.has_flag(flag) == appears
 	visible = active
 	$CollisionShape2D.set_deferred("disabled", not active)
+
+
+func _burst() -> void:
+	var fx := ROCK_SHATTER if look == "rocks" and not appears else DUST_PUFF
+	var y := 0.0
+	while y < height:
+		Vfx.spawn(fx, get_parent(), global_position + Vector2(0, -y)).material = material
+		y += 48.0
+	var player := get_tree().get_first_node_in_group("player")
+	if player:
+		player.shake()
 
 
 func _build() -> void:

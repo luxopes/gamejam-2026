@@ -11,11 +11,12 @@ extends Sprite2D
 var _time := 0.0
 
 
-static func spawn(scene: PackedScene, parent: Node, at: Vector2, flip := 1.0) -> void:
+static func spawn(scene: PackedScene, parent: Node, at: Vector2, flip := 1.0) -> Node2D:
 	var fx: Node2D = scene.instantiate()
 	fx.scale.x *= flip
 	parent.add_child(fx)
 	fx.global_position = at
+	return fx
 
 
 func _ready() -> void:

@@ -63,12 +63,13 @@ Player settings are exported on the `Player` node. Character animations are in
 | Slash sound — `assets/sfx/sword.wav` | [10SWORD05.aif](https://freesound.org/people/lostchocolatelab/sounds/1468/) by lostchocolatelab (Freesound); lossless AIFF-to-WAV conversion | CC0 1.0 |
 | Jump sound — `assets/sfx/jump.wav` | [JH FX Short Whoosh 1](https://freesound.org/people/Johnnie_Holiday/sounds/696649/) by Johnnie_Holiday (Freesound); shortened and converted from MP4 to WAV | CC0 1.0 |
 | Time travel sound — `assets/sfx/portal.wav` | [Portal Phase Jump.wav](https://freesound.org/people/Vic5555/sounds/494484/) by Vic5555 (Freesound); original file | CC0 1.0 |
-| Slash, hit, hurt, dash dust, jump/landing dust, treasure glint, bloom and holy heal effects — `assets/vfx/` | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) by nerijs / Pixel VFX Studio, Strict style | CC0 1.0 |
+| Slash, hit, hurt, dash dust, jump/landing dust, treasure glint, bloom, holy heal, rock shatter and star burst effects — `assets/vfx/` | [PVFX Foundry](https://nerijs.itch.io/pvfx-foundry) by nerijs / Pixel VFX Studio, Strict style | CC0 1.0 |
 | Portal — `assets/vfx/portal.png` | [Portals 32 x 48](https://opengameart.org/content/portals-32-x-48) by RodHakGames; original file | CC0 1.0 |
 | Collectible coin — `assets/items/coin.png` | [Simple rotating coin](https://opengameart.org/content/simple-rotating-coin) by sacio; original file | CC0 1.0 |
 | Pickup effect — `assets/vfx/item_feedback.png` | [Sunny Land](https://opengameart.org/content/sunny-land-2d-pixel-art-pack) by Luis Zuno (ansimuz); four frames combined into a sheet | CC0 1.0 |
+| Checkpoint lever — `assets/items/lever_down.png`, `lever_up.png` | [Sunny Land](https://opengameart.org/content/sunny-land-2d-pixel-art-pack) by Luis Zuno (ansimuz); original `crank-down.png` and `crank-up.png` | CC0 1.0 |
 | Bounce crystal — `assets/items/crystal.png` | [Ancient Crystal 2D Pixel Art](https://opengameart.org/content/ancient-crystal-2d-pixel-art) by One To Zero; original file | CC0 1.0 |
-| Forest tiles, backgrounds, props, chest and chest sound — `assets/levels/sunnyland/` | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) by Luis Zuno (ansimuz) | CC0 1.0; [included license](assets/levels/sunnyland/LICENSE.txt) |
+| Forest tiles, backgrounds, props, chest and chest sound — `assets/levels/sunnyland/`; enemy death puff — `assets/vfx/enemy_death.png` | [Sunnyland Forest](https://opengameart.org/content/sunnyland-forest) by Luis Zuno (ansimuz) | CC0 1.0; [included license](assets/levels/sunnyland/LICENSE.txt) |
 | HUD hearts — `assets/ui/hearts.png`, `hearts_gray.png` | [Healthbar sprite](https://opengameart.org/node/182567) by ArtBIT; original files | CC0 1.0 |
 | HUD coin icons — `assets/ui/coin.png`, `coins.png` | [Gold treasure icons 16x16](https://opengameart.org/content/gold-treasure-icons-16x16) by [Bonsaiheldin](http://bonsaiheld.org); original files | CC0 1.0 |
 | Font — `assets/fonts/PixelifySans.ttf` | [Pixelify Sans](https://github.com/google/fonts/tree/main/ofl/pixelifysans) by Stefie Justprince | [SIL OFL 1.1](assets/fonts/PixelifySans-OFL.txt) |
